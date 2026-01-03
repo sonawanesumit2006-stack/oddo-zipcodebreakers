@@ -97,32 +97,30 @@ export default function Settings() {
                       Theme
                     </label>
                     <div className="flex items-center gap-3">
-                      <select
-                        className="px-4 py-3 rounded-lg border border-border focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-all text-foreground bg-background/50 hover:border-border/80"
-                        value={settings.theme}
-                        onChange={(e) => update({ theme: e.target.value })}
+                      <button
+                        className={`inline-flex items-center gap-2 px-4 py-3 rounded-lg border transition-all ${settings.theme === 'light'
+                            ? 'border-primary bg-primary text-white'
+                            : 'border-border bg-transparent text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                          }`}
+                        onClick={() => update({ theme: 'light' })}
+                        aria-label="Light mode"
+                        title="Light mode"
                       >
-                        <option value="light">Light</option>
-                        <option value="dark">Dark</option>
-                      </select>
+                        <Icon name="Sun" size={18} color={settings.theme === 'light' ? '#ffffff' : undefined} />
+                        <span className="text-sm font-medium">Light</span>
+                      </button>
 
                       <button
-                        className="inline-flex items-center gap-2 px-4 py-3 rounded-lg border border-border bg-transparent hover:bg-muted/20 transition-all"
-                        onClick={() => update({ theme: settings.theme === 'dark' ? 'light' : 'dark' })}
-                        aria-label="Toggle theme"
-                        title="Toggle theme"
+                        className={`inline-flex items-center gap-2 px-4 py-3 rounded-lg border transition-all ${settings.theme === 'dark'
+                            ? 'border-primary bg-primary text-white'
+                            : 'border-border bg-transparent text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                          }`}
+                        onClick={() => update({ theme: 'dark' })}
+                        aria-label="Dark mode"
+                        title="Dark mode"
                       >
-                        {settings.theme === 'dark' ? (
-                          <>
-                            <Icon name="Sun" size={18} />
-                            <span className="text-sm text-foreground">Light</span>
-                          </>
-                        ) : (
-                          <>
-                            <Icon name="Moon" size={18} />
-                            <span className="text-sm text-foreground">Dark</span>
-                          </>
-                        )}
+                        <Icon name="Moon" size={18} color={settings.theme === 'dark' ? '#ffffff' : undefined} />
+                        <span className="text-sm font-medium">Dark</span>
                       </button>
                     </div>
                   </div>
