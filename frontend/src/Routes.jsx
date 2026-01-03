@@ -3,6 +3,7 @@ import { BrowserRouter, Routes as RouterRoutes, Route } from "react-router-dom";
 import ScrollToTop from "components/ScrollToTop";
 import ErrorBoundary from "components/ErrorBoundary";
 import NotFound from "pages/NotFound";
+import LandingPage from './pages/landing';
 import Login from './pages/login';
 import BudgetManagement from './pages/budget-management';
 import ActivityManagement from './pages/activity-management';
@@ -14,18 +15,18 @@ const Routes = () => {
   return (
     <BrowserRouter>
       <ErrorBoundary>
-      <ScrollToTop />
-      <RouterRoutes>
-        {/* Define your route here */}
-        <Route path="/" element={<Login />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/budget-management" element={<BudgetManagement />} />
-        <Route path="/activity-management" element={<ActivityManagement />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/my-trips" element={<MyTrips />} />
-        <Route path="/trip-detail" element={<TripDetail />} />
-        <Route path="*" element={<NotFound />} />
-      </RouterRoutes>
+        <ScrollToTop />
+        <RouterRoutes>
+          {/* Define your route here */}
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/budget-management" element={<BudgetManagement />} />
+          <Route path="/activity-management" element={<ActivityManagement />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/my-trips" element={<MyTrips />} />
+          <Route path="/trip-detail" element={<TripDetail />} />
+          <Route path="*" element={<NotFound />} />
+        </RouterRoutes>
       </ErrorBoundary>
     </BrowserRouter>
   );
