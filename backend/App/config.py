@@ -12,7 +12,9 @@ class Settings(BaseSettings):
 
 
     class Config:
-        env_file = ".env" # Tells Pydantic to read from this file
+        # Check current directory and parent directory for .env
+        env_file = [".env", "../.env"]
+        extra = "ignore" # Ignore extra fields in .env
 
 # Create a single instance to use everywhere
 settings = Settings()
