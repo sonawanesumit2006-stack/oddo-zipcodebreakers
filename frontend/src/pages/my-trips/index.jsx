@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SidebarNavigation from '../../components/ui/SidebarNavigation';
 import Button from '../../components/ui/Button';
@@ -6,11 +6,13 @@ import TripCard from './components/TripCard';
 import FilterPanel from './components/FilterPanel';
 import EmptyState from './components/EmptyState';
 import StatsOverview from './components/StatsOverview';
+import api from '../../api/axios';
 
 const MyTrips = () => {
   const navigate = useNavigate();
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [realTrips, setRealTrips] = useState([]);
   const [filters, setFilters] = useState({
     search: '',
     status: 'all',
@@ -20,6 +22,34 @@ const MyTrips = () => {
     budgetMin: '',
     budgetMax: ''
   });
+
+  useEffect(() => {
+    const fetchTrips = async () => {
+      try {
+        const response = await api.get('/trips/');
+        // Map backend format to frontend format
+        const formattedTrips = response.data.map(trip => ({
+          id: `real-${trip.id}`, // Avoid collision with mock IDs
+          title: trip.title,
+          image: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1", // Default travel image
+          imageAlt: `Trip to ${trip.destination_cache}`,
+          cities: [trip.destination_cache],
+          startDate: trip.start_date,
+          endDate: trip.end_date,
+          duration: Math.max(1, Math.ceil((new Date(trip.end_date) - new Date(trip.start_date)) / (1000 * 60 * 60 * 24))),
+          totalBudget: trip.budget_limit,
+          spent: 0,
+          status: 'planned', // Default
+          completionPercentage: 0,
+          createdDate: new Date().toISOString().split('T')[0]
+        }));
+        setRealTrips(formattedTrips);
+      } catch (error) {
+        console.error("Failed to fetch trips", error);
+      }
+    };
+    fetchTrips();
+  }, []);
 
   const mockTrips = [
     {
@@ -113,9 +143,11 @@ const MyTrips = () => {
       createdDate: "2025-11-20"
     }];
 
+  // Combine mock and real trips
+  const allTrips = useMemo(() => [...mockTrips, ...realTrips], [realTrips]);
 
   const filteredAndSortedTrips = useMemo(() => {
-    let result = [...mockTrips];
+    let result = [...allTrips];
 
     if (filters?.search) {
       const searchLower = filters?.search?.toLowerCase();
@@ -170,16 +202,16 @@ const MyTrips = () => {
     });
 
     return result;
-  }, [filters, mockTrips]);
+  }, [filters, allTrips]);
 
   const stats = useMemo(() => {
     return {
-      totalTrips: mockTrips?.length,
-      activeTrips: mockTrips?.filter((t) => t?.status === 'active')?.length,
-      totalBudget: mockTrips?.reduce((sum, t) => sum + t?.totalBudget, 0),
-      citiesVisited: new Set(mockTrips.flatMap((t) => t.cities))?.size
+      totalTrips: allTrips?.length,
+      activeTrips: allTrips?.filter((t) => t?.status === 'active')?.length,
+      totalBudget: allTrips?.reduce((sum, t) => sum + t?.totalBudget, 0),
+      citiesVisited: new Set(allTrips.flatMap((t) => t.cities))?.size
     };
-  }, [mockTrips]);
+  }, [allTrips]);
 
   const handleFilterChange = (key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));

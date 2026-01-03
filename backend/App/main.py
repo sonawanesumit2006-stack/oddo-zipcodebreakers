@@ -13,7 +13,27 @@ from .routers import users # Import users router
 from fastapi.staticfiles import StaticFiles
 
 app = FastAPI(lifespan=lifespan)
-# ... middlewares ...
+# Serve Uploads
+app.mount("/static", StaticFiles(directory="App/uploads"), name="static")
+
+# This encrypts cookies so we can safely store the "state" during the Google dance
+app.add_middleware(SessionMiddleware, secret_key=settings.secret_key)
+
+origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:4028",
+    "http://127.0.0.1:4028",
+    "http://172.18.15.10:4028",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # app.include_router(items.router)
 app.include_router(google_auth.router)

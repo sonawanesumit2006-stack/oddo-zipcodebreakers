@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile
 from sqlmodel import Session, select
 from typing import Optional
 from pydantic import BaseModel
@@ -36,6 +36,40 @@ def update_user_profile(
     if profile_data.home_city is not None:
         user.home_city = profile_data.home_city
         
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+    return user
+
+@router.post("/avatar", response_model=User)
+def upload_avatar(
+    file: UploadFile = File(...),
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user)
+):
+    import shutil
+    import os
+    
+    # Create upload directory if not exists
+    UPLOAD_DIR = "App/uploads"
+    os.makedirs(UPLOAD_DIR, exist_ok=True)
+    
+    # Generate unique filename or overwrite user's file
+    # Simple strategy: user_{id}_avatar.ext
+    file_ext = file.filename.split('.')[-1]
+    filename = f"user_{current_user.id}_avatar.{file_ext}"
+    file_path = os.path.join(UPLOAD_DIR, filename)
+    
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+        
+    # Update user profile
+    # URL should be relative path served by StaticFiles
+    # In main.py: app.mount("/static", StaticFiles(directory="App/uploads"), name="static")
+    avatar_url = f"/static/{filename}"
+    
+    user = session.get(User, current_user.id)
+    user.avatar_url = avatar_url
     session.add(user)
     session.commit()
     session.refresh(user)
