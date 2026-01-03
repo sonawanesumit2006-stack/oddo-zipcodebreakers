@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from .config import settings
 
-engine = create_engine(settings.database_url)
+engine = create_engine(settings.database_url, pool_pre_ping=True, pool_recycle=300)
 def create_db_and_table():
     SQLModel.metadata.create_all(engine)
 

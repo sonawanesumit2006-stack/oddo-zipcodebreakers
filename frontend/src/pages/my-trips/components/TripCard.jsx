@@ -67,7 +67,7 @@ const TripCard = ({ trip }) => {
       </div>
       <div className="p-4 md:p-5 lg:p-6">
         <h3 className="text-lg md:text-xl font-semibold text-foreground mb-2 line-clamp-1">{trip?.title}</h3>
-        
+
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
           <Icon name="Calendar" size={16} color="var(--color-muted-foreground)" />
           <span>{formatDate(trip?.startDate)} - {formatDate(trip?.endDate)}</span>
@@ -87,12 +87,11 @@ const TripCard = ({ trip }) => {
           </div>
           <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
             <div
-              className={`h-full transition-smooth ${
-                calculateBudgetPercentage() >= 90
+              className={`h-full transition-smooth ${calculateBudgetPercentage() >= 90
                   ? 'bg-destructive'
                   : calculateBudgetPercentage() >= 75
-                  ? 'bg-warning' :'bg-success'
-              }`}
+                    ? 'bg-warning' : 'bg-success'
+                }`}
               style={{ width: `${Math.min(calculateBudgetPercentage(), 100)}%` }}
             />
           </div>
@@ -118,7 +117,7 @@ const TripCard = ({ trip }) => {
             variant="default"
             size="sm"
             fullWidth
-            onClick={() => navigate('/trip-detail', { state: { tripId: trip?.id } })}
+            onClick={() => navigate(`/trip-detail/${trip?.id}`)}
           >
             View Details
           </Button>
@@ -126,14 +125,14 @@ const TripCard = ({ trip }) => {
             variant="outline"
             size="sm"
             iconName="Share2"
-            onClick={() => {}}
+            onClick={() => { }}
             className="flex-shrink-0"
           />
           <Button
             variant="outline"
             size="sm"
             iconName="Copy"
-            onClick={() => {}}
+            onClick={() => { }}
             className="flex-shrink-0"
           />
         </div>

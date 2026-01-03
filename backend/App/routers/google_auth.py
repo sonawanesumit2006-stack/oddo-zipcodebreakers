@@ -74,7 +74,7 @@ async def google_auth(request: Request, session: Session = Depends(get_session))
     # D. Redirect to Frontend
     # We pass the token in the URL so the frontend can grab it
     # In production, using cookies is safer, but this is standard for simple apps.
-    return RedirectResponse(url=f"http://localhost:5173/google-callback?token={access_token}")
+    return RedirectResponse(url=f"http://localhost:4028/google-callback?token={access_token}")
 
 # Helper for Redirect
 from fastapi.responses import RedirectResponse

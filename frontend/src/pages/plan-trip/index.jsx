@@ -5,9 +5,12 @@ import Button from '../../components/ui/Button';
 import Icon from '../../components/AppIcon';
 import Input from '../../components/ui/Input';
 
+import api from '../../api/axios';
+
 const PlanTrip = () => {
     const navigate = useNavigate();
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
         destination: '',
         startDate: '',
@@ -15,18 +18,49 @@ const PlanTrip = () => {
         travelers: 1,
         budget: ''
     });
+    const [stops, setStops] = useState([]);
+    const [currentStop, setCurrentStop] = useState('');
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleAddStop = () => {
+        if (currentStop.trim()) {
+            setStops(prev => [...prev, currentStop.trim()]);
+            setCurrentStop('');
+        }
+    };
+
+    const handleRemoveStop = (indexToRemove) => {
+        setStops(prev => prev.filter((_, index) => index !== indexToRemove));
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // In a real app, this would save the trip to the backend
-        console.log("Trip Created:", formData);
-        alert("Trip created successfully! Redirecting to details...");
-        navigate('/trip-detail'); // Redirect to the newly created trip details
+        setIsLoading(true);
+
+        try {
+            const payload = {
+                destination: formData.destination,
+                start_date: formData.startDate,
+                end_date: formData.endDate,
+                travelers: parseInt(formData.travelers),
+                budget: parseFloat(formData.budget) || 0,
+                stops: stops
+            };
+
+            await api.post('/trips/', payload);
+
+            alert("Trip created successfully!");
+            navigate('/my-trips'); // Redirect to trips list
+        } catch (error) {
+            console.error("Failed to create trip:", error);
+            alert("Failed to create trip. Please try again.");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -65,6 +99,46 @@ const PlanTrip = () => {
                                         required
                                     />
                                 </div>
+                            </div>
+
+                            {/* Stops */}
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-gray-700">Stops along the way (Optional)</label>
+                                <div className="flex gap-2">
+                                    <div className="relative flex-1">
+                                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                                            <Icon name="MapPin" size={18} />
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={currentStop}
+                                            onChange={(e) => setCurrentStop(e.target.value)}
+                                            placeholder="Add city or place"
+                                            onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddStop(); } }}
+                                            className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all placeholder:text-gray-400"
+                                        />
+                                    </div>
+                                    <Button type="button" onClick={handleAddStop} variant="outline" className="shrink-0">
+                                        Add
+                                    </Button>
+                                </div>
+
+                                {stops.length > 0 && (
+                                    <div className="flex flex-wrap gap-2 mt-2">
+                                        {stops.map((stop, index) => (
+                                            <div key={index} className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm font-medium flex items-center gap-2 border border-blue-100">
+                                                {stop}
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleRemoveStop(index)}
+                                                    className="text-blue-400 hover:text-blue-600 outline-none"
+                                                >
+                                                    <Icon name="X" size={14} />
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -157,10 +231,11 @@ const PlanTrip = () => {
                                     variant="default"
                                     fullWidth
                                     type="submit"
-                                    iconName="ArrowRight"
+                                    disabled={isLoading}
+                                    iconName={isLoading ? "Loader" : "ArrowRight"}
                                     iconPosition="right"
                                 >
-                                    Create Trip
+                                    {isLoading ? "Creating..." : "Create Trip"}
                                 </Button>
                             </div>
 

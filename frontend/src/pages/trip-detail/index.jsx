@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import SidebarNavigation from '../../components/ui/SidebarNavigation';
 import Button from '../../components/ui/Button';
 import TripHeader from './components/TripHeader';
@@ -7,10 +7,11 @@ import BudgetOverviewCard from './components/BudgetOverviewCard';
 import CityBudgetBreakdown from './components/CityBudgetBreakdown';
 import TimelineViewToggle from './components/TimelineViewToggle';
 import DayTimeline from './components/DayTimeline';
-
 import ShareModal from './components/ShareModal';
+import api from '../../api/axios';
 
 const TripDetail = () => {
+  const { tripId } = useParams();
   const navigate = useNavigate();
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [activeView, setActiveView] = useState('day');
@@ -18,133 +19,130 @@ const TripDetail = () => {
   const contentRef = useRef(null);
   const [isExporting, setIsExporting] = useState(false);
 
-  const tripData = {
-    id: 1,
-    title: "Rajasthan Heritage Tour 2026",
-    description: "A comprehensive journey through the royal heritage of Rajasthan, exploring magnificent forts, palaces, vibrant culture, and traditional Rajasthani cuisine across the desert state.",
-    coverImage: "https://images.unsplash.com/photo-1575188566830-ccc495d2f7af",
-    coverImageAlt: "Illuminated Hawa Mahal palace in Jaipur with pink sandstone facade and intricate lattice windows at night",
-    startDate: "01/15/2026",
-    endDate: "01/28/2026",
-    cities: ["Jaipur", "Udaipur", "Jodhpur"],
-    travelers: 4,
-    totalBudget: 12500,
-    totalSpent: 8750,
-    remainingBudget: 3750,
-    dailyAverage: 625
+  // Data States
+  const [trip, setTrip] = useState(null);
+  const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchTripData = async () => {
+      try {
+        setLoading(true);
+        const [tripRes, statsRes] = await Promise.all([
+          api.get(`/trips/${tripId}`),
+          api.get(`/trips/${tripId}/stats`)
+        ]);
+        setTrip(tripRes.data);
+        setStats(statsRes.data);
+      } catch (err) {
+        console.error("Error fetching trip details:", err);
+        setError("Failed to load trip details.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (tripId) {
+      fetchTripData();
+    }
+  }, [tripId]);
+
+  // Transform Data for UI
+  const getTimelineData = () => {
+    if (!trip) return [];
+
+    // Create a map of activities by date
+    const activitiesByDate = {};
+    if (trip.stops) {
+      trip.stops.forEach(stop => {
+        if (stop.activities) {
+          stop.activities.forEach(act => {
+            const dateStr = act.activity_date; // YYYY-MM-DD
+            if (dateStr) {
+              if (!activitiesByDate[dateStr]) activitiesByDate[dateStr] = [];
+              // Add city info to activity for display if needed
+              activitiesByDate[dateStr].push({ ...act, city: stop.city.name });
+            }
+          });
+        }
+      });
+    }
+
+    // Generate days array
+    const start = new Date(trip.start_date);
+    const end = new Date(trip.end_date);
+    const timeline = [];
+    let current = new Date(start);
+    let dayNum = 1;
+
+    while (current <= end) {
+      const dateKey = current.toISOString().split('T')[0];
+      const dayActivities = activitiesByDate[dateKey] || [];
+
+      // Find city for this day (heuristic: city of first activity, or first stop with this arrival date?)
+      // Simple fallback: use destination or find a stop that covers this date
+      let city = trip.destination_cache;
+      if (dayActivities.length > 0) {
+        city = dayActivities[0].city;
+      } else {
+        // Try to find a stop overlapping this day
+        // For now default to first city or destination
+        if (trip.stops && trip.stops.length > 0) city = trip.stops[0].city.name;
+      }
+
+      timeline.push({
+        dayNumber: dayNum,
+        date: current.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+        city: city,
+        activities: dayActivities.map(act => ({
+          id: act.id,
+          title: act.title,
+          category: act.category || "Activity",
+          time: act.start_time || "All Day",
+          location: act.description || "", // Mapping description to location if empty? 
+          cost: act.cost,
+          isPaid: act.is_completed, // Using is_completed as proxy or just false?
+          description: act.description,
+          notes: ""
+        }))
+      });
+
+      current.setDate(current.getDate() + 1);
+      dayNum++;
+    }
+    return timeline;
   };
 
-  const budgetBreakdown = [
-    { id: 1, name: "Jaipur", budget: 5000, spent: 4200 },
-    { id: 2, name: "Udaipur", budget: 4000, spent: 2800 },
-    { id: 3, name: "Jodhpur", budget: 3500, spent: 1750 }];
+  const tripData = trip ? {
+    id: trip.id,
+    title: trip.title,
+    description: trip.description || `Trip to ${trip.destination_cache}`,
+    coverImage: trip.cover_image_url || "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800", // Default
+    coverImageAlt: trip.destination_cache,
+    startDate: new Date(trip.start_date).toLocaleDateString(),
+    endDate: new Date(trip.end_date).toLocaleDateString(),
+    cities: trip.stops ? trip.stops.map(s => s.city.name) : [trip.destination_cache],
+    travelers: trip.travelers,
+    totalBudget: trip.budget_limit,
+    totalSpent: stats?.total_spent || 0,
+    remainingBudget: stats?.remaining_budget || 0,
+    dailyAverage: stats?.remaining_budget ? Math.round(stats.remaining_budget / Math.max(1, (new Date(trip.end_date) - new Date(trip.start_date)) / (1000 * 60 * 60 * 24))) : 0
+  } : null;
 
+  const timelineData = getTimelineData();
 
-  const timelineData = [
-    {
-      dayNumber: 1,
-      date: "January 15, 2026",
-      city: "Jaipur",
-      activities: [
-        {
-          id: 1,
-          title: "Flight to Jaipur",
-          category: "Transport",
-          time: "08:00 AM - 11:30 AM",
-          location: "Jaipur International Airport",
-          cost: 450,
-          isPaid: true,
-          description: "Direct flight from Delhi to Jaipur International Airport. Economy class with meal service included.",
-          notes: "Check-in opens 2 hours before departure. Arrive at airport by 6:30 AM."
-        },
-        {
-          id: 2,
-          title: "Hotel Check-in - Heritage Haveli",
-          category: "Accommodation",
-          time: "02:00 PM",
-          location: "Old City, Jaipur",
-          cost: 280,
-          isPaid: true,
-          description: "Traditional heritage haveli in the old city with views of City Palace. Includes breakfast and WiFi.",
-          notes: "Early check-in confirmed. Room 405 with palace view."
-        },
-        {
-          id: 3,
-          title: "Hawa Mahal Visit & Dinner",
-          category: "Activity",
-          time: "06:00 PM - 10:00 PM",
-          location: "Hawa Mahal, Jaipur",
-          cost: 180,
-          isPaid: false,
-          description: "Evening visit to the iconic Palace of Winds with skip-the-line tickets. Followed by dinner at a traditional Rajasthani restaurant.",
-          notes: "Tickets booked for 6:30 PM. Restaurant reservation at 8:30 PM."
-        }]
+  const budgetBreakdown = stats?.city_breakdown?.map((item, idx) => ({
+    id: idx,
+    name: item.city,
+    budget: 0, // Backend doesn't give per-city budget limit yet
+    spent: item.amount
+  })) || [];
 
-    },
-    {
-      dayNumber: 2,
-      date: "January 16, 2026",
-      city: "Jaipur",
-      activities: [
-        {
-          id: 4,
-          title: "Amber Fort Tour",
-          category: "Activity",
-          time: "09:00 AM - 01:00 PM",
-          location: "Amber Fort, Jaipur",
-          cost: 120,
-          isPaid: true,
-          description: "Guided tour of the magnificent Amber Fort featuring Sheesh Mahal, Diwan-i-Aam, and stunning Rajput architecture.",
-          notes: "Meet guide at main entrance. Elephant ride optional."
-        },
-        {
-          id: 5,
-          title: "Lunch at Chokhi Dhani",
-          category: "Food",
-          time: "01:30 PM - 03:00 PM",
-          location: "Chokhi Dhani, Jaipur",
-          cost: 95,
-          isPaid: false,
-          description: "Traditional Rajasthani village resort offering authentic dal baati churma and other local delicacies with cultural performances.",
-          notes: "Reservation under name. Try the thali."
-        },
-        {
-          id: 6,
-          title: "City Palace Evening Tour",
-          category: "Activity",
-          time: "07:00 PM - 09:00 PM",
-          location: "City Palace, Jaipur",
-          cost: 85,
-          isPaid: true,
-          description: "Evening tour of the royal City Palace complex with live commentary about Jaipur\'s royal history and architecture.",
-          notes: "Entry starts at 6:45 PM. Dress code: Modest attire."
-        }]
+  if (loading) return <div className="flex h-screen items-center justify-center">Loading...</div>;
+  if (error) return <div className="flex h-screen items-center justify-center text-red-500">{error}</div>;
+  if (!tripData) return <div className="flex h-screen items-center justify-center">Trip not found</div>;
 
-    },
-    {
-      dayNumber: 3,
-      date: "January 17, 2026",
-      city: "Jaipur",
-      activities: [
-        {
-          id: 7,
-          title: "Train to Udaipur",
-          category: "Transport",
-          time: "10:00 AM - 01:30 PM",
-          location: "Jaipur Junction to Udaipur City",
-          cost: 320,
-          isPaid: true,
-          description: "Express train journey through the Aravalli hills from Jaipur to the City of Lakes, Udaipur.",
-          notes: "AC chair car tickets. Seats 21A-21D. Arrive 30 minutes early."
-        }]
-
-    },
-    {
-      dayNumber: 4,
-      date: "January 18, 2026",
-      city: "Udaipur",
-      activities: []
-    }];
 
 
   const handleShare = () => {
@@ -219,7 +217,7 @@ const TripDetail = () => {
           page += 1;
         }
 
-        const fileName = `${(tripData?.title || 'itinerary').replace(/\s+/g,'_')}.pdf`;
+        const fileName = `${(tripData?.title || 'itinerary').replace(/\s+/g, '_')}.pdf`;
         pdf.save(fileName);
 
       } else {
@@ -259,7 +257,7 @@ const TripDetail = () => {
         className={`transition-smooth ${isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-60'} pt-16 lg:pt-0`
         }>
 
-<div ref={contentRef} id="export-area" className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-8">
+        <div ref={contentRef} id="export-area" className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-8">
           <TripHeader
             trip={tripData}
             onShare={handleShare}

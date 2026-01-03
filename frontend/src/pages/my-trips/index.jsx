@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SidebarNavigation from '../../components/ui/SidebarNavigation';
 import Button from '../../components/ui/Button';
@@ -6,11 +6,13 @@ import TripCard from './components/TripCard';
 import FilterPanel from './components/FilterPanel';
 import EmptyState from './components/EmptyState';
 import StatsOverview from './components/StatsOverview';
+import api from '../../api/axios';
 
 const MyTrips = () => {
   const navigate = useNavigate();
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [realTrips, setRealTrips] = useState([]);
   const [filters, setFilters] = useState({
     search: '',
     status: 'all',
@@ -21,9 +23,40 @@ const MyTrips = () => {
     budgetMax: ''
   });
 
+  useEffect(() => {
+    const fetchTrips = async () => {
+      try {
+        const response = await api.get('/trips/');
+        // Map backend format to frontend format
+        const formattedTrips = response.data.map(trip => ({
+          id: trip.id, // Use actual ID for navigation
+          title: trip.title,
+          image: trip.cover_image_url || "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1",
+          imageAlt: `Trip to ${trip.destination_cache}`,
+          cities: trip.stops && trip.stops.length > 0
+            ? trip.stops.map(stop => stop.city.name)
+            : [trip.destination_cache],
+          startDate: trip.start_date,
+          endDate: trip.end_date,
+          duration: Math.max(1, Math.ceil((new Date(trip.end_date) - new Date(trip.start_date)) / (1000 * 60 * 60 * 24))),
+          totalBudget: trip.budget_limit,
+          spent: trip.total_spent || 0,
+          status: trip.status ? trip.status.toLowerCase() : 'planned',
+          completionPercentage: 0, // Could calculate based on date?
+          createdDate: new Date(trip.created_at).toISOString().split('T')[0],
+          isReal: true
+        }));
+        setRealTrips(formattedTrips);
+      } catch (error) {
+        console.error("Failed to fetch trips", error);
+      }
+    };
+    fetchTrips();
+  }, []);
+
   const mockTrips = [
     {
-      id: 1,
+      id: 101,
       title: "Rajasthan Heritage Tour 2026",
       image: "https://images.unsplash.com/photo-1619663157564-ef32b3dfe257",
       imageAlt: "Aerial view of Jaipur Pink City with historic forts, palaces, and traditional Rajasthani architecture under blue sky",
@@ -35,10 +68,11 @@ const MyTrips = () => {
       spent: 3200,
       status: "planned",
       completionPercentage: 45,
-      createdDate: "2026-01-02"
+      createdDate: "2026-01-02",
+      isReal: false
     },
     {
-      id: 2,
+      id: 102,
       title: "South India Temple Trail",
       image: "https://images.unsplash.com/photo-1727993995329-fe20d4f65972",
       imageAlt: "Magnificent Meenakshi Temple with colorful gopuram towers and intricate South Indian temple architecture at sunset",
@@ -50,10 +84,11 @@ const MyTrips = () => {
       spent: 4100,
       status: "active",
       completionPercentage: 75,
-      createdDate: "2025-12-15"
+      createdDate: "2025-12-15",
+      isReal: false
     },
     {
-      id: 3,
+      id: 103,
       title: "Goa Beach Retreat",
       image: "https://images.unsplash.com/photo-1586971265827-96808ac11d74",
       imageAlt: "Pristine Goa beach with golden sand, swaying palm trees, and turquoise Arabian Sea waters at golden hour",
@@ -65,10 +100,11 @@ const MyTrips = () => {
       spent: 3000,
       status: "completed",
       completionPercentage: 100,
-      createdDate: "2025-10-01"
+      createdDate: "2025-10-01",
+      isReal: false
     },
     {
-      id: 4,
+      id: 104,
       title: "Himalayan Adventure",
       image: "https://images.unsplash.com/photo-1622172327433-fff482ffd21b",
       imageAlt: "Majestic snow-capped Himalayan peaks with colorful Buddhist prayer flags and mountain monastery in foreground",
@@ -80,10 +116,11 @@ const MyTrips = () => {
       spent: 1200,
       status: "planned",
       completionPercentage: 20,
-      createdDate: "2025-12-28"
+      createdDate: "2025-12-28",
+      isReal: false
     },
     {
-      id: 5,
+      id: 105,
       title: "Kerala Backwaters Journey",
       image: "https://images.unsplash.com/photo-1634141693341-9d51836aa188",
       imageAlt: "Traditional Kerala houseboat on tranquil backwaters with coconut palms and lush tropical greenery reflected in water",
@@ -95,10 +132,11 @@ const MyTrips = () => {
       spent: 0,
       status: "planned",
       completionPercentage: 10,
-      createdDate: "2026-01-01"
+      createdDate: "2026-01-01",
+      isReal: false
     },
     {
-      id: 6,
+      id: 106,
       title: "Northeast India Discovery",
       image: "https://images.unsplash.com/photo-1682134936734-6cc2a4258a77",
       imageAlt: "Lush green valleys and misty mountains of Northeast India with traditional tribal villages and terraced fields",
@@ -110,12 +148,15 @@ const MyTrips = () => {
       spent: 5600,
       status: "active",
       completionPercentage: 85,
-      createdDate: "2025-11-20"
+      createdDate: "2025-11-20",
+      isReal: false
     }];
 
+  // Combine mock and real trips
+  const allTrips = useMemo(() => [...realTrips, ...mockTrips], [realTrips]);
 
   const filteredAndSortedTrips = useMemo(() => {
-    let result = [...mockTrips];
+    let result = [...allTrips];
 
     if (filters?.search) {
       const searchLower = filters?.search?.toLowerCase();
@@ -170,16 +211,16 @@ const MyTrips = () => {
     });
 
     return result;
-  }, [filters, mockTrips]);
+  }, [filters, allTrips]);
 
   const stats = useMemo(() => {
     return {
-      totalTrips: mockTrips?.length,
-      activeTrips: mockTrips?.filter((t) => t?.status === 'active')?.length,
-      totalBudget: mockTrips?.reduce((sum, t) => sum + t?.totalBudget, 0),
-      citiesVisited: new Set(mockTrips.flatMap((t) => t.cities))?.size
+      totalTrips: allTrips?.length,
+      activeTrips: allTrips?.filter((t) => t?.status === 'active')?.length,
+      totalBudget: allTrips?.reduce((sum, t) => sum + t?.totalBudget, 0),
+      citiesVisited: new Set(allTrips.flatMap((t) => t.cities))?.size
     };
-  }, [mockTrips]);
+  }, [allTrips]);
 
   const handleFilterChange = (key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
@@ -249,7 +290,7 @@ const MyTrips = () => {
             <div className="lg:col-span-3">
               <div className="mb-4 flex items-center justify-between">
                 <p className="text-sm md:text-base text-muted-foreground">
-                  Showing {filteredAndSortedTrips?.length} of {mockTrips?.length} trips
+                  Showing {filteredAndSortedTrips?.length} of {allTrips?.length} trips
                 </p>
               </div>
 
@@ -258,7 +299,7 @@ const MyTrips = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-5 lg:gap-6">
                   {filteredAndSortedTrips?.map((trip) =>
-                    <TripCard key={trip?.id} trip={trip} />
+                    <TripCard key={`${trip.isReal ? 'real' : 'mock'}-${trip.id}`} trip={trip} />
                   )}
                 </div>
               }

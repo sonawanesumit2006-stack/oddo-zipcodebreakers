@@ -11,10 +11,17 @@ class ExpenseCategory(str, Enum):
     ACTIVITY = "Activity"
     OTHER = "Other"
 
+class TripStatus(str, Enum):
+    PLANNING = "Planning"
+    ACTIVE = "Active"
+    COMPLETED = "Completed"
+    CANCELLED = "Cancelled"
+
+
 # --- USERS ---
 class User(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-    name: str
+    name: str # Full Name
     username: str = Field(index=True, unique=True)
     email: str = Field(index=True, unique=True)
     hashed_password: str
@@ -46,7 +53,11 @@ class Trip(SQLModel, table=True):
     start_date: Optional[date] = None
     end_date: Optional[date] = None
     budget_limit: float = 0.0
+    travelers: int = 1
+    status: TripStatus = TripStatus.PLANNING
+    destination_cache: Optional[str] = None # Stores "Where to?" string
     is_public: bool = False
+    cover_image_url: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
     
     # Foreign Key
