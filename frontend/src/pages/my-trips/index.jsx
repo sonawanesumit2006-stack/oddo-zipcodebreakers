@@ -33,7 +33,9 @@ const MyTrips = () => {
           title: trip.title,
           image: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1", // Default travel image
           imageAlt: `Trip to ${trip.destination_cache}`,
-          cities: [trip.destination_cache],
+          cities: trip.stops && trip.stops.length > 0
+            ? trip.stops.map(stop => stop.city.name)
+            : [trip.destination_cache],
           startDate: trip.start_date,
           endDate: trip.end_date,
           duration: Math.max(1, Math.ceil((new Date(trip.end_date) - new Date(trip.start_date)) / (1000 * 60 * 60 * 24))),
