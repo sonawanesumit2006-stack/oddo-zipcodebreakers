@@ -25,6 +25,8 @@ origins = [
     "http://localhost:4028",
     "http://127.0.0.1:4028",
     "http://172.18.15.10:4028",
+    "https://odohackthonhosting.vercel.app",
+    "https://odohackthonhosting.vercel.app/",
 ]
 
 app.add_middleware(
