@@ -8,12 +8,12 @@ import CityBudgetBreakdown from './components/CityBudgetBreakdown';
 import TimelineViewToggle from './components/TimelineViewToggle';
 import DayTimeline from './components/DayTimeline';
 
+import ShareModal from './components/ShareModal';
+
 const TripDetail = () => {
   const navigate = useNavigate();
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [activeView, setActiveView] = useState('day');
-  const contentRef = useRef(null);
-  const [isExporting, setIsExporting] = useState(false);
 
   const tripData = {
     id: 1,
@@ -32,120 +32,120 @@ const TripDetail = () => {
   };
 
   const budgetBreakdown = [
-  { id: 1, name: "Jaipur", budget: 5000, spent: 4200 },
-  { id: 2, name: "Udaipur", budget: 4000, spent: 2800 },
-  { id: 3, name: "Jodhpur", budget: 3500, spent: 1750 }];
+    { id: 1, name: "Jaipur", budget: 5000, spent: 4200 },
+    { id: 2, name: "Udaipur", budget: 4000, spent: 2800 },
+    { id: 3, name: "Jodhpur", budget: 3500, spent: 1750 }];
 
 
   const timelineData = [
-  {
-    dayNumber: 1,
-    date: "January 15, 2026",
-    city: "Jaipur",
-    activities: [
     {
-      id: 1,
-      title: "Flight to Jaipur",
-      category: "Transport",
-      time: "08:00 AM - 11:30 AM",
-      location: "Jaipur International Airport",
-      cost: 450,
-      isPaid: true,
-      description: "Direct flight from Delhi to Jaipur International Airport. Economy class with meal service included.",
-      notes: "Check-in opens 2 hours before departure. Arrive at airport by 6:30 AM."
-    },
-    {
-      id: 2,
-      title: "Hotel Check-in - Heritage Haveli",
-      category: "Accommodation",
-      time: "02:00 PM",
-      location: "Old City, Jaipur",
-      cost: 280,
-      isPaid: true,
-      description: "Traditional heritage haveli in the old city with views of City Palace. Includes breakfast and WiFi.",
-      notes: "Early check-in confirmed. Room 405 with palace view."
-    },
-    {
-      id: 3,
-      title: "Hawa Mahal Visit & Dinner",
-      category: "Activity",
-      time: "06:00 PM - 10:00 PM",
-      location: "Hawa Mahal, Jaipur",
-      cost: 180,
-      isPaid: false,
-      description: "Evening visit to the iconic Palace of Winds with skip-the-line tickets. Followed by dinner at a traditional Rajasthani restaurant.",
-      notes: "Tickets booked for 6:30 PM. Restaurant reservation at 8:30 PM."
-    }]
+      dayNumber: 1,
+      date: "January 15, 2026",
+      city: "Jaipur",
+      activities: [
+        {
+          id: 1,
+          title: "Flight to Jaipur",
+          category: "Transport",
+          time: "08:00 AM - 11:30 AM",
+          location: "Jaipur International Airport",
+          cost: 450,
+          isPaid: true,
+          description: "Direct flight from Delhi to Jaipur International Airport. Economy class with meal service included.",
+          notes: "Check-in opens 2 hours before departure. Arrive at airport by 6:30 AM."
+        },
+        {
+          id: 2,
+          title: "Hotel Check-in - Heritage Haveli",
+          category: "Accommodation",
+          time: "02:00 PM",
+          location: "Old City, Jaipur",
+          cost: 280,
+          isPaid: true,
+          description: "Traditional heritage haveli in the old city with views of City Palace. Includes breakfast and WiFi.",
+          notes: "Early check-in confirmed. Room 405 with palace view."
+        },
+        {
+          id: 3,
+          title: "Hawa Mahal Visit & Dinner",
+          category: "Activity",
+          time: "06:00 PM - 10:00 PM",
+          location: "Hawa Mahal, Jaipur",
+          cost: 180,
+          isPaid: false,
+          description: "Evening visit to the iconic Palace of Winds with skip-the-line tickets. Followed by dinner at a traditional Rajasthani restaurant.",
+          notes: "Tickets booked for 6:30 PM. Restaurant reservation at 8:30 PM."
+        }]
 
-  },
-  {
-    dayNumber: 2,
-    date: "January 16, 2026",
-    city: "Jaipur",
-    activities: [
-    {
-      id: 4,
-      title: "Amber Fort Tour",
-      category: "Activity",
-      time: "09:00 AM - 01:00 PM",
-      location: "Amber Fort, Jaipur",
-      cost: 120,
-      isPaid: true,
-      description: "Guided tour of the magnificent Amber Fort featuring Sheesh Mahal, Diwan-i-Aam, and stunning Rajput architecture.",
-      notes: "Meet guide at main entrance. Elephant ride optional."
     },
     {
-      id: 5,
-      title: "Lunch at Chokhi Dhani",
-      category: "Food",
-      time: "01:30 PM - 03:00 PM",
-      location: "Chokhi Dhani, Jaipur",
-      cost: 95,
-      isPaid: false,
-      description: "Traditional Rajasthani village resort offering authentic dal baati churma and other local delicacies with cultural performances.",
-      notes: "Reservation under name. Try the thali."
+      dayNumber: 2,
+      date: "January 16, 2026",
+      city: "Jaipur",
+      activities: [
+        {
+          id: 4,
+          title: "Amber Fort Tour",
+          category: "Activity",
+          time: "09:00 AM - 01:00 PM",
+          location: "Amber Fort, Jaipur",
+          cost: 120,
+          isPaid: true,
+          description: "Guided tour of the magnificent Amber Fort featuring Sheesh Mahal, Diwan-i-Aam, and stunning Rajput architecture.",
+          notes: "Meet guide at main entrance. Elephant ride optional."
+        },
+        {
+          id: 5,
+          title: "Lunch at Chokhi Dhani",
+          category: "Food",
+          time: "01:30 PM - 03:00 PM",
+          location: "Chokhi Dhani, Jaipur",
+          cost: 95,
+          isPaid: false,
+          description: "Traditional Rajasthani village resort offering authentic dal baati churma and other local delicacies with cultural performances.",
+          notes: "Reservation under name. Try the thali."
+        },
+        {
+          id: 6,
+          title: "City Palace Evening Tour",
+          category: "Activity",
+          time: "07:00 PM - 09:00 PM",
+          location: "City Palace, Jaipur",
+          cost: 85,
+          isPaid: true,
+          description: "Evening tour of the royal City Palace complex with live commentary about Jaipur\'s royal history and architecture.",
+          notes: "Entry starts at 6:45 PM. Dress code: Modest attire."
+        }]
+
     },
     {
-      id: 6,
-      title: "City Palace Evening Tour",
-      category: "Activity",
-      time: "07:00 PM - 09:00 PM",
-      location: "City Palace, Jaipur",
-      cost: 85,
-      isPaid: true,
-      description: "Evening tour of the royal City Palace complex with live commentary about Jaipur\'s royal history and architecture.",
-      notes: "Entry starts at 6:45 PM. Dress code: Modest attire."
-    }]
+      dayNumber: 3,
+      date: "January 17, 2026",
+      city: "Jaipur",
+      activities: [
+        {
+          id: 7,
+          title: "Train to Udaipur",
+          category: "Transport",
+          time: "10:00 AM - 01:30 PM",
+          location: "Jaipur Junction to Udaipur City",
+          cost: 320,
+          isPaid: true,
+          description: "Express train journey through the Aravalli hills from Jaipur to the City of Lakes, Udaipur.",
+          notes: "AC chair car tickets. Seats 21A-21D. Arrive 30 minutes early."
+        }]
 
-  },
-  {
-    dayNumber: 3,
-    date: "January 17, 2026",
-    city: "Jaipur",
-    activities: [
+    },
     {
-      id: 7,
-      title: "Train to Udaipur",
-      category: "Transport",
-      time: "10:00 AM - 01:30 PM",
-      location: "Jaipur Junction to Udaipur City",
-      cost: 320,
-      isPaid: true,
-      description: "Express train journey through the Aravalli hills from Jaipur to the City of Lakes, Udaipur.",
-      notes: "AC chair car tickets. Seats 21A-21D. Arrive 30 minutes early."
-    }]
-
-  },
-  {
-    dayNumber: 4,
-    date: "January 18, 2026",
-    city: "Udaipur",
-    activities: []
-  }];
+      dayNumber: 4,
+      date: "January 18, 2026",
+      city: "Udaipur",
+      activities: []
+    }];
 
 
   const handleShare = () => {
-    alert('Share functionality: Trip link copied to clipboard!\n\nShare this trip with friends and family to collaborate on planning.');
+    setIsShareModalOpen(true);
   };
 
   const handleEditTrip = () => {
@@ -253,8 +253,7 @@ const TripDetail = () => {
     <div className="min-h-screen bg-background">
       <SidebarNavigation isCollapsed={isSidebarCollapsed} />
       <main
-        className={`transition-smooth ${
-        isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-60'} pt-16 lg:pt-0`
+        className={`transition-smooth ${isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-60'} pt-16 lg:pt-0`
         }>
 
 <div ref={contentRef} id="export-area" className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-8">
@@ -300,7 +299,7 @@ const TripDetail = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
             <CityBudgetBreakdown cities={budgetBreakdown} />
-            
+
             <div className="bg-card rounded-xl p-4 md:p-6 shadow-elevation-2 border border-border">
               <h3 className="text-lg md:text-xl font-semibold text-foreground mb-4">Quick Actions</h3>
               <div className="space-y-3">
@@ -348,12 +347,12 @@ const TripDetail = () => {
 
             <div className="space-y-4 md:space-y-6">
               {timelineData?.map((day) =>
-              <DayTimeline
-                key={day?.dayNumber}
-                day={day}
-                onAddActivity={handleAddActivity}
-                onEditActivity={handleEditActivity}
-                onDeleteActivity={handleDeleteActivity} />
+                <DayTimeline
+                  key={day?.dayNumber}
+                  day={day}
+                  onAddActivity={handleAddActivity}
+                  onEditActivity={handleEditActivity}
+                  onDeleteActivity={handleDeleteActivity} />
 
               )}
             </div>
@@ -372,8 +371,14 @@ const TripDetail = () => {
           </div>
         </div>
       </main>
-    </div>);
 
+      {/* Share Modal */}
+      <ShareModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        tripTitle={tripData.title}
+      />
+    </div>);
 };
 
 export default TripDetail;
