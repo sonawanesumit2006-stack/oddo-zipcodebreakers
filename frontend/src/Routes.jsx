@@ -13,6 +13,10 @@ import MyTrips from './pages/my-trips';
 import TripDetail from './pages/trip-detail';
 import JoinTrip from './pages/join-trip';
 import PlanTrip from './pages/plan-trip';
+import Community from './pages/community';
+import EventsList from './pages/community/components/EventsList';
+import PostDetails from './pages/community/PostDetails';
+import Settings from './pages/settings';
 
 const Routes = () => {
   return (
