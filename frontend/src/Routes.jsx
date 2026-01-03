@@ -13,6 +13,9 @@ import MyTrips from './pages/my-trips';
 import TripDetail from './pages/trip-detail';
 import JoinTrip from './pages/join-trip';
 import PlanTrip from './pages/plan-trip';
+import CurrencyConverter from './pages/currency-converter';
+import PackList from './pages/pack-list';
+import Transport from './pages/transport';
 
 const Routes = () => {
   return (
@@ -31,6 +34,9 @@ const Routes = () => {
           <Route path="/trip-detail" element={<TripDetail />} />
           <Route path="/trip/share/:tripId" element={<JoinTrip />} />
           <Route path="/plan-trip" element={<PlanTrip />} />
+          <Route path="/currency-converter" element={<CurrencyConverter />} />
+          <Route path="/pack-list" element={<PackList />} />
+          <Route path="/transport" element={<Transport />} />
           <Route path="*" element={<NotFound />} />
         </RouterRoutes>
       </ErrorBoundary>

@@ -7,9 +7,9 @@ const QuickToolsCard = ({ onShowMap }) => {
 
   const tools = [
     { icon: 'Map', label: 'Map View', action: 'map', color: '#8B5CF6' },
-    { icon: 'List', label: 'Pack List', path: '/my-trips', color: '#10B981' },
-    { icon: 'DollarSign', label: 'Converter', path: '/budget-management', color: '#F59E0B' },
-    { icon: 'Plane', label: 'Flights', path: '/activity-management', color: '#EC4899' }
+    { icon: 'List', label: 'Pack List', path: '/pack-list', color: '#10B981' },
+    { icon: 'DollarSign', label: 'Converter', path: '/currency-converter', color: '#F59E0B' },
+    { icon: 'Train', label: 'Transport', path: '/transport', color: '#EC4899' }
   ];
 
   const handleToolClick = (tool) => {
