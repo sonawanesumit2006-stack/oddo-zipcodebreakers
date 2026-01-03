@@ -48,10 +48,34 @@ def verify():
     
     try:
         with urllib.request.urlopen(req) as response:
-            print("Create Trip Response:", response.status)
-            print(response.read().decode())
+            trip_data = json.loads(response.read().decode())
+            print(f"Create Trip Response: {trip_data.get('id')}")
     except urllib.error.HTTPError as e:
         print(f"Create Trip Failed: {e.code} {e.read().decode()}")
+        return
+
+    # 4. Get Trip Details (Test Eager Load & total_spent)
+    trip_id = trip_data.get('id')
+    req = urllib.request.Request(f"{BASE_URL}/trips/{trip_id}")
+    req.add_header("Authorization", f"Bearer {token}")
+    try:
+        with urllib.request.urlopen(req) as response:
+            details_data = json.loads(response.read().decode())
+            print(f"Trip Details Keys: {list(details_data.keys())}")
+            print(f"Total Spent (Computed): {details_data.get('total_spent')}")
+    except urllib.error.HTTPError as e:
+        print(f"Details Error: {e.read().decode()}")
+
+    # 5. Get Trip Stats
+    req_stats = urllib.request.Request(f"{BASE_URL}/trips/{trip_id}/stats")
+    req_stats.add_header("Authorization", f"Bearer {token}")
+    try:
+        with urllib.request.urlopen(req_stats) as response:
+            stats_data = json.loads(response.read().decode())
+            print(f"Trip Stats: {stats_data}")
+    except urllib.error.HTTPError as e:
+        print(f"Stats Error: {e.read().decode()}")
+        print(f"Stats Error Code: {e.code}")
 
 if __name__ == "__main__":
     # Create ssl context if needed (not for localhost http)

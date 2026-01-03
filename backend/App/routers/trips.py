@@ -13,11 +13,24 @@ router = APIRouter(prefix="/trips", tags=["Trips"])
 # --- Pydantic Models for Requests/Responses ---
 from pydantic import BaseModel
 
+# --- Pydantic Models for Requests/Responses ---
+from pydantic import BaseModel
+
 class cityRead(BaseModel):
     id: int
     name: str
     country: str
     image_url: Optional[str] = None
+
+class ActivityRead(BaseModel):
+    id: int
+    title: str
+    description: Optional[str] = None
+    category: ExpenseCategory
+    cost: float = 0.0
+    activity_date: Optional[date] = None
+    start_time: Optional[time] = None
+    is_completed: bool = False
 
 class StopRead(BaseModel):
     id: int
@@ -25,12 +38,14 @@ class StopRead(BaseModel):
     arrival_date: Optional[date] = None
     departure_date: Optional[date] = None
     order_index: int
+    activities: List[ActivityRead] = []
 
 class TripRead(BaseModel):
     id: int
     title: str
     description: Optional[str] = None
     destination_cache: Optional[str] = None
+    cover_image_url: Optional[str] = None
     start_date: Optional[date] = None
     end_date: Optional[date] = None
     budget_limit: float = 0.0
@@ -40,6 +55,7 @@ class TripRead(BaseModel):
     created_at: datetime
     owner_id: int
     stops: List[StopRead] = []
+    total_spent: Optional[float] = 0.0
 
 class TripCreateSchema(BaseModel):
     destination: str
@@ -118,10 +134,39 @@ def get_my_trips(
     session: Session = Depends(get_session),
     current_user: User = Depends(get_current_user)
 ):
+    # Eager load stops, cities, and activities for the list view as well (optional but good for consistency)
     statement = select(Trip).where(Trip.owner_id == current_user.id).options(
-        selectinload(Trip.stops).selectinload(ItineraryStop.city)
+        selectinload(Trip.stops).selectinload(ItineraryStop.city),
+        selectinload(Trip.stops).selectinload(ItineraryStop.activities)
     )
-    return session.exec(statement).all()
+    trips = session.exec(statement).all()
+    
+    # Calculate total_spent for each trip
+    # This might be expensive for lists, but requested for TripRead
+    trip_reads = []
+    for trip in trips:
+        total = sum(act.cost for stop in trip.stops for act in stop.activities)
+        # Convert to Pydantic model and patch total_spent
+        # Or let Pydantic construct it if we pass a dict-like or just assign attribute if it was a dynamic object
+        # Since SQLModel objects are not dicts, we can use TripRead.from_orm(trip) but adding total_spent is tricky
+        # Easiest: Construct TripRead manually or extend result
+        
+        # Simple hack: Attach property if valid, or construct Pydantic obj
+        # Because we need to map internal structure, automatic mapping is best. 
+        # But total_spent is not on SQLModel. 
+        # We can construct the dict.
+        trip_dict = trip.model_dump()
+        trip_dict['stops'] = [
+            {
+                **stop.model_dump(),
+                'city': stop.city.model_dump(),
+                'activities': [act.model_dump() for act in stop.activities]
+            } for stop in trip.stops
+        ]
+        trip_dict['total_spent'] = total
+        trip_reads.append(TripRead(**trip_dict))
+        
+    return trip_reads
 
 @router.get("/{trip_id}", response_model=TripRead)
 def get_trip_details(
@@ -130,7 +175,8 @@ def get_trip_details(
     current_user: User = Depends(get_current_user)
 ):
     statement = select(Trip).where(Trip.id == trip_id).options(
-        selectinload(Trip.stops).selectinload(ItineraryStop.city)
+        selectinload(Trip.stops).selectinload(ItineraryStop.city),
+        selectinload(Trip.stops).selectinload(ItineraryStop.activities)
     )
     trip = session.exec(statement).first()
     
@@ -141,7 +187,75 @@ def get_trip_details(
     if trip.owner_id != current_user.id and not trip.is_public:
          raise HTTPException(status_code=403, detail="Not authorized to view this trip")
     
-    return trip
+    # Calculate total spent
+    total_spent = sum(act.cost for stop in trip.stops for act in stop.activities)
+    
+    # Return as TripRead with computed field
+    trip_dict = trip.model_dump()
+    # Explicitly map stops because model_dump might only dump immediate fields or fail on relations depending on config
+    # SQLModel model_dump generally doesn't recurse relations unless configured?
+    # Actually for response_model it does validation from ORM object. 
+    # But for 'total_spent' we need to pass it. 
+    # Let's construct TripRead explicitly using model_validate but passing extra context? 
+    # Or just dict construction.
+    
+    trip_dict['stops'] = [
+            {
+                **stop.model_dump(),
+                'city': stop.city.model_dump(),
+                'activities': [act.model_dump() for act in stop.activities]
+            } for stop in trip.stops
+        ]
+    trip_dict['total_spent'] = total_spent
+    
+    return TripRead(**trip_dict)
+
+@router.get("/{trip_id}/stats")
+def get_trip_stats(
+    trip_id: int,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user)
+):
+    statement = select(Trip).where(Trip.id == trip_id).options(
+        selectinload(Trip.stops).selectinload(ItineraryStop.city),
+        selectinload(Trip.stops).selectinload(ItineraryStop.activities)
+    )
+    trip = session.exec(statement).first()
+    
+    if not trip:
+        raise HTTPException(status_code=404, detail="Trip not found")
+    if trip.owner_id != current_user.id and not trip.is_public:
+        raise HTTPException(status_code=403, detail="Not authorized")
+        
+    # Calculations
+    total_budget = trip.budget_limit
+    total_spent = 0.0
+    category_breakdown = {}
+    city_breakdown = []
+    
+    for stop in trip.stops:
+        city_spent = 0.0
+        for act in stop.activities:
+            cost = act.cost
+            total_spent += cost
+            city_spent += cost
+            
+            # Category Breakdown
+            cat_name = act.category.value if act.category else "Other"
+            category_breakdown[cat_name] = category_breakdown.get(cat_name, 0) + cost
+            
+        city_breakdown.append({
+            "city": stop.city.name,
+            "amount": city_spent
+        })
+        
+    return {
+        "total_budget": total_budget,
+        "total_spent": total_spent,
+        "remaining_budget": total_budget - total_spent,
+        "category_breakdown": category_breakdown,
+        "city_breakdown": city_breakdown
+    }
 
 @router.post("/{trip_id}/stops", response_model=ItineraryStop)
 def add_stop_to_trip(

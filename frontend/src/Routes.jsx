@@ -37,7 +37,7 @@ const Routes = () => {
           <Route path="/activity-management" element={<ActivityManagement />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/my-trips" element={<MyTrips />} />
-          <Route path="/trip-detail" element={<TripDetail />} />
+          <Route path="/trip-detail/:tripId" element={<TripDetail />} />
           <Route path="/trip/share/:tripId" element={<JoinTrip />} />
           <Route path="/plan-trip" element={<PlanTrip />} />
           <Route path="/currency-converter" element={<CurrencyConverter />} />

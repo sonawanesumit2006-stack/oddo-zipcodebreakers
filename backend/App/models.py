@@ -57,6 +57,7 @@ class Trip(SQLModel, table=True):
     status: TripStatus = TripStatus.PLANNING
     destination_cache: Optional[str] = None # Stores "Where to?" string
     is_public: bool = False
+    cover_image_url: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
     
     # Foreign Key
