@@ -323,9 +323,9 @@ const Transport = () => {
                                                             <p className="text-sm text-gray-500">Flight {flight.flight?.iata || flight.flight?.number}</p>
                                                         </div>
                                                         <div className={`px-3 py-1 rounded-full text-xs font-semibold ${flight.flight_status === 'scheduled' ? 'bg-blue-500 text-white' :
-                                                                flight.flight_status === 'active' ? 'bg-green-500 text-white' :
-                                                                    flight.flight_status === 'landed' ? 'bg-gray-500 text-white' :
-                                                                        'bg-amber-500 text-white'
+                                                            flight.flight_status === 'active' ? 'bg-green-500 text-white' :
+                                                                flight.flight_status === 'landed' ? 'bg-gray-500 text-white' :
+                                                                    'bg-amber-500 text-white'
                                                             }`}>
                                                             {flight.flight_status?.toUpperCase() || 'SCHEDULED'}
                                                         </div>
@@ -371,89 +371,6 @@ const Transport = () => {
                                         </div>
                                     </div>
                                 </div>
-                            )}
-                            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
-                                <div className="bg-gradient-to-r from-purple-50 to-indigo-50 p-6 border-b border-gray-100">
-                                    <div className="flex items-center justify-between">
-                                        <div>
-                                            <h3 className="text-2xl font-bold text-gray-900">{flightData.airline?.name || 'Airline'}</h3>
-                                            <p className="text-gray-600">Flight {flightData.flight?.iata || flightNumber}</p>
-                                        </div>
-                                        <div className={`px-4 py-2 rounded-full text-sm font-semibold ${flightData.flight_status === 'scheduled' ? 'bg-blue-500 text-white' :
-                                            flightData.flight_status === 'active' ? 'bg-green-500 text-white' :
-                                                flightData.flight_status === 'landed' ? 'bg-gray-500 text-white' :
-                                                    'bg-amber-500 text-white'
-                                            }`}>
-                                            {flightData.flight_status?.toUpperCase() || 'SCHEDULED'}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="p-6">
-                                    {/* Flight Route */}
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                                        {/* Departure */}
-                                        <div className="bg-blue-50 rounded-2xl p-6">
-                                            <div className="flex items-center gap-2 mb-3">
-                                                <Icon name="PlaneTakeoff" className="text-blue-600" size={20} />
-                                                <span className="text-sm font-semibold text-gray-600">Departure</span>
-                                            </div>
-                                            <div className="text-2xl font-bold text-gray-900 mb-1">
-                                                {flightData.departure?.iata || 'N/A'}
-                                            </div>
-                                            <div className="text-sm text-gray-600 mb-3">
-                                                {flightData.departure?.airport || 'Airport'}
-                                            </div>
-                                            <div className="text-lg font-semibold text-blue-600">
-                                                {flightData.departure?.scheduled ? new Date(flightData.departure.scheduled).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) : '--:--'}
-                                            </div>
-                                            <div className="text-xs text-gray-500">
-                                                {flightData.departure?.scheduled ? new Date(flightData.departure.scheduled).toLocaleDateString() : ''}
-                                            </div>
-                                        </div>
-
-                                        {/* Arrival */}
-                                        <div className="bg-purple-50 rounded-2xl p-6">
-                                            <div className="flex items-center gap-2 mb-3">
-                                                <Icon name="PlaneLanding" className="text-purple-600" size={20} />
-                                                <span className="text-sm font-semibold text-gray-600">Arrival</span>
-                                            </div>
-                                            <div className="text-2xl font-bold text-gray-900 mb-1">
-                                                {flightData.arrival?.iata || 'N/A'}
-                                            </div>
-                                            <div className="text-sm text-gray-600 mb-3">
-                                                {flightData.arrival?.airport || 'Airport'}
-                                            </div>
-                                            <div className="text-lg font-semibold text-purple-600">
-                                                {flightData.arrival?.scheduled ? new Date(flightData.arrival.scheduled).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) : '--:--'}
-                                            </div>
-                                            <div className="text-xs text-gray-500">
-                                                {flightData.arrival?.scheduled ? new Date(flightData.arrival.scheduled).toLocaleDateString() : ''}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Additional Info */}
-                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                        <div className="bg-gray-50 rounded-xl p-4">
-                                            <div className="text-xs text-gray-500 mb-1">Date</div>
-                                            <div className="font-semibold text-gray-900">{flightData.flight_date || flightDate}</div>
-                                        </div>
-                                        <div className="bg-gray-50 rounded-xl p-4">
-                                            <div className="text-xs text-gray-500 mb-1">Airline</div>
-                                            <div className="font-semibold text-gray-900">{flightData.airline?.iata || 'N/A'}</div>
-                                        </div>
-                                        <div className="bg-gray-50 rounded-xl p-4">
-                                            <div className="text-xs text-gray-500 mb-1">Flight No.</div>
-                                            <div className="font-semibold text-gray-900">{flightData.flight?.iata || flightNumber}</div>
-                                        </div>
-                                        <div className="bg-gray-50 rounded-xl p-4">
-                                            <div className="text-xs text-gray-500 mb-1">Status</div>
-                                            <div className="font-semibold text-gray-900 capitalize">{flightData.flight_status || 'Scheduled'}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             )}
                         </div>
                     )}

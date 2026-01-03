@@ -13,16 +13,13 @@ import MyTrips from './pages/my-trips';
 import TripDetail from './pages/trip-detail';
 import JoinTrip from './pages/join-trip';
 import PlanTrip from './pages/plan-trip';
-<<<<<<< HEAD
 import CurrencyConverter from './pages/currency-converter';
 import PackList from './pages/pack-list';
 import Transport from './pages/transport';
-=======
 import Community from './pages/community';
 import EventsList from './pages/community/components/EventsList';
 import PostDetails from './pages/community/PostDetails';
 import Settings from './pages/settings';
->>>>>>> 0c4a4f4422a1dca6b5435d8cf9485c1a97814a0e
 
 const Routes = () => {
   return (
@@ -40,22 +37,19 @@ const Routes = () => {
           <Route path="/my-trips" element={<MyTrips />} />
           <Route path="/trip-detail" element={<TripDetail />} />
           <Route path="/trip/share/:tripId" element={<JoinTrip />} />
-<<<<<<< HEAD
           <Route path="/plan-trip" element={<PlanTrip />} />
           <Route path="/currency-converter" element={<CurrencyConverter />} />
           <Route path="/pack-list" element={<PackList />} />
           <Route path="/transport" element={<Transport />} />
-=======
           {/* Community and settings routes */}
           <Route path="/community" element={<Community />} />
           <Route path="/community/post/:id" element={<PostDetails />} />
           <Route path="/community/events" element={<EventsList />} />
           <Route path="/settings" element={<Settings />} />
->>>>>>> 0c4a4f4422a1dca6b5435d8cf9485c1a97814a0e
           <Route path="*" element={<NotFound />} />
-        </RouterRoutes>
-      </ErrorBoundary>
-    </BrowserRouter>
+        </RouterRoutes >
+      </ErrorBoundary >
+    </BrowserRouter >
   );
 };
 
