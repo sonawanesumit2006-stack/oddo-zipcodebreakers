@@ -1,8 +1,29 @@
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+.venv/
+venv/
+env/
+
+# Environment Variables
+.env
+
+# Local Databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Uploaded Files
+App/uploads/*
+!App/uploads/.gitkeep
+
+# OS generated files
 .DS_Store
-node_modules
-.idea
-package-lock.json
-/build
+Thumbs.db
+
+# IDEs
 .vscode/
 .idea/
-vite.config.*s.*
