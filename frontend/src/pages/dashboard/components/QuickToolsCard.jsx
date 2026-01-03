@@ -14,7 +14,7 @@ const QuickToolsCard = () => {
 
   return (
     <div className="bg-white rounded-2xl shadow-md p-6">
-      <h3 className="text-lg font-bold text-gray-900 mb-4">Quick Tools</h3>
+      <h3 className="text-lg font-bold text-foreground mb-4">Quick Tools</h3>
       <div className="grid grid-cols-2 gap-4">
         {tools?.map((tool, index) => (
           <button
@@ -28,7 +28,7 @@ const QuickToolsCard = () => {
             >
               <Icon name={tool?.icon} size={24} color={tool?.color} />
             </div>
-            <span className="text-sm font-medium text-gray-700">{tool?.label}</span>
+            <span className="text-sm font-medium text-muted-foreground">{tool?.label}</span>
           </button>
         ))}
       </div>

@@ -58,20 +58,20 @@ const BudgetOverviewCard = ({ budgetData }) => {
   };
 
   return (
-    <div ref={cardRef} className="bg-white rounded-2xl shadow-md p-6">
+    <div ref={cardRef} className="bg-card rounded-2xl shadow-md p-6">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
             <Icon name="Wallet" size={18} color="#3B82F6" />
           </div>
-          <h3 className="text-lg font-bold text-gray-900">Budget Overview</h3>
+          <h3 className="text-lg font-bold text-foreground">Budget Overview</h3>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={(e) => {
               e?.stopPropagation();
             }}
-            className="text-gray-400 hover:text-gray-600"
+            className="text-muted-foreground hover:text-foreground"
             aria-label="More options"
           >
             <Icon name="MoreVertical" size={20} />
@@ -118,19 +118,19 @@ const BudgetOverviewCard = ({ budgetData }) => {
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-4xl font-bold text-gray-900">{spentPercentage}%</span>
-            <span className="text-sm text-gray-500">Spent</span>
+            <span className="text-4xl font-bold text-foreground">{spentPercentage}%</span>
+            <span className="text-sm text-muted-foreground">Spent</span>
           </div>
         </div>
       </div>
       {/* Budget Details */}
       <div className="space-y-4 mb-6">
         <div className="flex items-center justify-between">
-          <span className="text-sm text-gray-600">Total Budget</span>
-          <span className="text-lg font-bold text-gray-900">{formatCurrency(totalBudget)}</span>
+          <span className="text-sm text-muted-foreground">Total Budget</span>
+          <span className="text-lg font-bold text-foreground">{formatCurrency(totalBudget)}</span>
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-sm text-gray-600">Remaining</span>
+          <span className="text-sm text-muted-foreground">Remaining</span>
           <span className="text-lg font-bold text-green-600">{formatCurrency(remaining)}</span>
         </div>
       </div>
@@ -142,9 +142,9 @@ const BudgetOverviewCard = ({ budgetData }) => {
               <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
                 <Icon name={category?.icon} size={16} color="#3B82F6" />
               </div>
-              <span className="text-sm font-medium text-gray-700">{category?.name}</span>
+              <span className="text-sm font-medium text-foreground">{category?.name}</span>
             </div>
-            <span className="text-sm font-semibold text-gray-900">{formatCurrency(category?.spent)}</span>
+            <span className="text-sm font-semibold text-foreground">{formatCurrency(category?.spent)}</span>
           </div>
         ))}
       </div>

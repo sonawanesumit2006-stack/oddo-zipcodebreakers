@@ -98,18 +98,11 @@ const SidebarNavigation = ({ isCollapsed = false }) => {
           ))}
         </nav>
 
-        <div className="absolute bottom-6 left-0 right-0 px-6">
-          <div className={`flex items-center gap-3 px-4 py-3 bg-muted rounded-lg ${isCollapsed ? 'justify-center' : ''}`}>
-            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-              <Icon name="User" size={16} color="var(--color-primary-foreground)" />
-            </div>
-            {!isCollapsed && (
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-foreground truncate">Travel Explorer</p>
-                <p className="text-xs text-muted-foreground truncate">explorer@globetrotter.com</p>
-              </div>
-            )}
-          </div>
+        <div className="fixed bottom-6 left-4 z-50">
+          <Link to="/settings" onClick={handleNavItemClick} title="Account" className="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-elevation-2 hover:shadow-elevation-3 focus:outline-none focus:ring-2 focus:ring-primary/40" aria-label="Account">
+            <Icon name="User" size={18} color="var(--color-primary-foreground)" />
+            <span className="sr-only">Account</span>
+          </Link>
         </div>
       </aside>
     </>

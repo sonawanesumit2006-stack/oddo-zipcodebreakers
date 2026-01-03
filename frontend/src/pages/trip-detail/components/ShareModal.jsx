@@ -34,33 +34,33 @@ const ShareModal = ({ isOpen, onClose, tripTitle }) => {
             ></div>
 
             {/* Modal Content */}
-            <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6 transform transition-all scale-100">
+            <div className="relative bg-card rounded-2xl shadow-xl w-full max-w-md p-6 transform transition-all scale-100">
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+                    className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
                 >
                     <Icon name="X" size={20} />
                 </button>
 
                 <div className="mb-6">
                     <div className="flex items-center gap-3 mb-2">
-                        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                        <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
                             <Icon name="Users" className="text-blue-600 w-5 h-5" />
                         </div>
-                        <h2 className="text-xl font-bold text-gray-900">Share Trip</h2>
+                        <h2 className="text-xl font-bold text-foreground">Share Trip</h2>
                     </div>
-                    <p className="text-gray-600 text-sm">
+                    <p className="text-muted-foreground text-sm">
                         Invite friends to plan <strong>{tripTitle}</strong> with you.
                     </p>
                 </div>
 
                 {/* Copy Link Section */}
                 <div className="mb-6">
-                    <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">
+                    <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
                         Trip Link
                     </label>
                     <div className="flex gap-2">
-                        <div className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-600 truncate font-mono">
+                        <div className="flex-1 bg-muted border border-border rounded-lg px-3 py-2 text-sm text-muted-foreground truncate font-mono">
                             {shareLink}
                         </div>
                         <button
@@ -79,33 +79,33 @@ const ShareModal = ({ isOpen, onClose, tripTitle }) => {
                 {/* Divider */}
                 <div className="relative mb-6">
                     <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-gray-200"></div>
+                        <div className="w-full border-t border-border"></div>
                     </div>
-                    <div className="relative flex justify-center text-xs uppercase text-gray-500 font-medium">
-                        <span className="px-2 bg-white">Or invite by email</span>
+                        <div className="relative flex justify-center text-xs uppercase text-muted-foreground font-medium">
+                        <span className="px-2 bg-card">Or invite by email</span>
                     </div>
                 </div>
 
                 {/* Email Invite Section */}
                 <form onSubmit={handleInvite}>
                     <div className="mb-4">
-                        <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">
+                        <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
                             Email Address
                         </label>
                         <div className="relative">
-                            <Icon name="Mail" className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                            <Icon name="Mail" className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
                             <input
                                 type="email"
                                 placeholder="friend@example.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all text-sm"
+                                className="w-full pl-9 pr-4 py-2.5 bg-card border border-border rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-sm text-foreground"
                             />
                         </div>
                     </div>
 
                     <div className="flex items-center justify-between gap-4">
-                        <select className="bg-gray-50 border border-gray-200 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 outline-none cursor-pointer">
+                        <select className="bg-card border border-border text-foreground text-sm rounded-lg focus:ring-primary/20 focus:border-primary block p-2.5 outline-none cursor-pointer">
                             <option>Can edit</option>
                             <option>Can view</option>
                         </select>

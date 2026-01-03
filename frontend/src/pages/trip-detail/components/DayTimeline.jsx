@@ -11,7 +11,7 @@ const DayTimeline = ({ day, onAddActivity, onEditActivity, onDeleteActivity }) =
       <div className="bg-gradient-to-r from-primary to-secondary p-4 md:p-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3 md:gap-4">
-            <div className="w-12 h-12 md:w-14 md:h-14 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0">
+            <div className="w-12 h-12 md:w-14 md:h-14 rounded-lg bg-white/20 dark:bg-white/10 flex items-center justify-center flex-shrink-0">
               <Icon name="Calendar" size={24} color="#FFFFFF" />
             </div>
             <div>

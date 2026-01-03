@@ -52,9 +52,9 @@ const JoinTrip = () => {
                             <img src="https://i.pravatar.cc/150?u=alex" alt="Organizer" />
                         </div>
                         <div>
-                            <p className="text-sm text-gray-500">Invited by</p>
-                            <p className="font-semibold text-gray-900">{tripDetails.organizer}</p>
-                            <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
+                            <p className="text-sm text-muted-foreground">Invited by</p>
+                            <p className="font-semibold text-foreground">{tripDetails.organizer}</p>
+                            <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
                                 <Icon name="Calendar" size={14} />
                                 <span>{tripDetails.dates}</span>
                             </div>
@@ -80,7 +80,7 @@ const JoinTrip = () => {
 
                         <button
                             onClick={() => navigate('/dashboard')}
-                            className="w-full py-2 text-sm text-gray-500 hover:text-gray-900 font-medium"
+                            className="w-full py-2 text-sm text-muted-foreground hover:text-foreground font-medium"
                         >
                             No, thanks
                         </button>
@@ -88,7 +88,7 @@ const JoinTrip = () => {
                 </div>
             </div>
 
-            <p className="relative z-10 text-gray-400 text-xs mt-8">
+            <p className="relative z-10 text-muted-foreground text-xs mt-8">
                 Powered by GlobeTrotter
             </p>
         </div>

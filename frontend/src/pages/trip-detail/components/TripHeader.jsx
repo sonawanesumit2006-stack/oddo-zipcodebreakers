@@ -18,10 +18,10 @@ const TripHeader = ({ trip, onShare, onEdit }) => {
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         <button
           onClick={() => navigate('/my-trips')}
-          className="absolute top-4 left-4 w-10 h-10 rounded-lg bg-white/90 backdrop-blur-sm flex items-center justify-center transition-smooth hover:bg-white"
+          className="absolute top-4 left-4 w-10 h-10 rounded-lg bg-white/90 dark:bg-card/90 backdrop-blur-sm flex items-center justify-center transition-smooth hover:bg-white dark:hover:bg-white/5"
           aria-label="Back to trips"
         >
-          <Icon name="ArrowLeft" size={20} color="#1F2937" />
+          <Icon name="ArrowLeft" size={20} color="var(--color-foreground)" />
         </button>
       </div>
       <div className="p-4 md:p-6">

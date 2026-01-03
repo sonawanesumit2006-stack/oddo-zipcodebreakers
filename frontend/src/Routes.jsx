@@ -12,6 +12,10 @@ import Dashboard from './pages/dashboard';
 import MyTrips from './pages/my-trips';
 import TripDetail from './pages/trip-detail';
 import JoinTrip from './pages/join-trip';
+import Community from './pages/community';
+import EventsList from './pages/community/components/EventsList';
+import PostDetails from './pages/community/PostDetails';
+import Settings from './pages/settings';
 
 const Routes = () => {
   return (
@@ -29,6 +33,10 @@ const Routes = () => {
           <Route path="/my-trips" element={<MyTrips />} />
           <Route path="/trip-detail" element={<TripDetail />} />
           <Route path="/trip/share/:tripId" element={<JoinTrip />} />
+          <Route path="/community" element={<Community />} />
+          <Route path="/community/events" element={<EventsList />} />
+          <Route path="/community/post/:id" element={<PostDetails />} />
+          <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<NotFound />} />
         </RouterRoutes>
       </ErrorBoundary>
