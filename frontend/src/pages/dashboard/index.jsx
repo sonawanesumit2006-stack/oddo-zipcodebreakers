@@ -111,73 +111,95 @@ const Dashboard = () => {
         <title>Dashboard - GlobeTrotter</title>
         <meta name="description" content="Manage your travel plans, track budgets, and explore new destinations with GlobeTrotter's comprehensive dashboard." />
       </Helmet>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-background">
         <SidebarNavigation isCollapsed={isSidebarCollapsed} />
 
         <main className={`transition-smooth ${isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-60'}`}>
-          <div className="px-4 md:px-6 lg:px-8 py-6 md:py-8 max-w-[1600px] mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Main Content Area */}
-              <div className="lg:col-span-2 space-y-6">
+          <div className="px-4 md:px-6 lg:px-8 py-8 md:py-12 max-w-[1600px] mx-auto">
+            {/* Quick Stats Bar */}
+            <div className="grid grid-cols-3 md:grid-cols-4 gap-4 mb-8 animate-fade-in">
+              <div className="bg-card border border-border/50 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-300">
+                <div className="text-xs text-muted-foreground font-semibold uppercase mb-1">Active Trips</div>
+                <div className="text-2xl font-bold text-primary">{mockTrips.filter(t => t.status === 'active').length}</div>
+              </div>
+              <div className="bg-card border border-border/50 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-300">
+                <div className="text-xs text-muted-foreground font-semibold uppercase mb-1">Planned</div>
+                <div className="text-2xl font-bold text-accent">{mockTrips.filter(t => t.status === 'planned').length}</div>
+              </div>
+              <div className="bg-card border border-border/50 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-300">
+                <div className="text-xs text-muted-foreground font-semibold uppercase mb-1">Completed</div>
+                <div className="text-2xl font-bold text-success">{mockTrips.filter(t => t.status === 'completed').length}</div>
+              </div>
+              <div className="bg-gradient-to-br from-primary/10 to-secondary/10 border border-border rounded-2xl p-4 shadow-sm hidden md:block">
+                <div className="text-xs text-muted-foreground font-semibold uppercase mb-1">Total Budget</div>
+                <div className="text-2xl font-bold text-foreground">₹{budgetData.totalBudget.toLocaleString()}</div>
+              </div>
+            </div>
 
-                {/* Visual Hero / Map Section */}
-                <div className="relative bg-gray-900 rounded-3xl overflow-hidden min-h-[400px] shadow-2xl border border-gray-800 transition-all duration-500">
-                  {/* Toggle Switch */}
-                  <div className="absolute top-4 right-4 z-20 bg-white/10 backdrop-blur-md rounded-lg p-1 flex border border-white/20">
-                    <button
-                      onClick={() => setShowMap(true)}
-                      className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${showMap ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-300 hover:text-white'}`}
-                    >
-                      Map View
-                    </button>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Main Content Area */}
+              <div className="lg:col-span-2 space-y-8">
+
+                {/* Hero Section with Map Toggle */}
+                <div className="relative bg-gradient-to-br from-primary via-primary/80 to-secondary rounded-3xl overflow-hidden h-[360px] shadow-2xl border border-border/20 transition-all duration-300 hover:shadow-3xl animate-fade-in">
+                  {/* Map/Hero Toggle */}
+                  <div className="absolute top-4 right-4 z-20 bg-card/80 backdrop-blur-md rounded-lg p-1 flex border border-border shadow-lg">
                     <button
                       onClick={() => setShowMap(false)}
-                      className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${!showMap ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-300 hover:text-white'}`}
+                      className={`px-4 py-2 rounded-md text-sm font-semibold transition-all ${!showMap ? 'bg-primary text-white shadow-lg' : 'text-muted-foreground hover:text-foreground'}`}
                     >
-                      Cards
+                      Hero
+                    </button>
+                    <button
+                      onClick={() => setShowMap(true)}
+                      className={`px-4 py-2 rounded-md text-sm font-semibold transition-all ${showMap ? 'bg-primary text-white shadow-lg' : 'text-muted-foreground hover:text-foreground'}`}
+                    >
+                      Map
                     </button>
                   </div>
 
                   {showMap ? (
-                    <div className="w-full h-full min-h-[400px]">
+                    <div className="w-full h-full">
                       <TripMapVisualization trips={mockTrips} />
-                      {/* Overlay Text for Map Mode */}
-                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900 to-transparent p-6 pointer-events-none">
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-6 pointer-events-none">
                         <h2 className="text-2xl font-bold text-white mb-1">Your Journey Map</h2>
-                        <p className="text-gray-400 text-sm">Visualizing {mockTrips.length} adventures across the globe.</p>
+                        <p className="text-gray-300 text-sm">Visualizing {mockTrips.length} adventures across India</p>
                       </div>
                     </div>
                   ) : (
                     <>
-                      <div className="absolute inset-0 opacity-60">
+                      <div className="absolute inset-0 opacity-30 blur-3xl">
                         <img
                           src="https://images.unsplash.com/photo-1699958110629-608c883131b8"
-                          alt="Landscape"
+                          alt="Mountain landscape"
                           className="w-full h-full object-cover"
                         />
                       </div>
-                      <div className="relative z-10 p-8 md:p-12 h-full flex flex-col justify-center bg-gradient-to-r from-gray-900/80 to-transparent">
-                        <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-4 leading-tight">
-                          Good Morning, Alex.<br />
-                          <span className="text-blue-400">Ready to explore?</span>
+                      <div className="relative z-10 p-8 md:p-12 h-full flex flex-col justify-center">
+                        <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-3 leading-tight">
+                          Good Morning, Alex.
+                          <br />
+                          <span className="text-white/90">Ready for your next adventure?</span>
                         </h1>
-                        <p className="text-gray-200 text-lg mb-8 max-w-xl">
-                          You have <span className="text-white font-bold">1 active trip</span> and <span className="text-white font-bold">2 planned</span>. Continue where you left off.
+                        <p className="text-white/80 text-base md:text-lg mb-8 max-w-xl">
+                          Start planning your dream itinerary today, or pick up exactly where you left off.
                         </p>
                         <div className="flex flex-wrap gap-3">
                           <Button
                             variant="default"
                             size="lg"
+                            iconName="Plus"
+                            iconPosition="left"
                             onClick={() => navigate('/plan-trip')}
-                            className="bg-blue-600 hover:bg-blue-700 border-none shadow-lg shadow-blue-900/20">
+                            className="bg-white text-primary hover:bg-white/90 shadow-lg">
                             Plan New Trip
                           </Button>
                           <Button
-                            variant="outline" // Changed since ghost on dark bg needs handling, utilizing outline with white styling via className
+                            variant="ghost"
                             size="lg"
                             onClick={() => navigate('/my-trips')}
-                            className="text-white border-white/30 hover:bg-white/10">
-                            View All Trips
+                            className="text-white border-white/30 hover:bg-white/10 hover:text-white">
+                            Resume Planning
                           </Button>
                         </div>
                       </div>
@@ -185,10 +207,13 @@ const Dashboard = () => {
                   )}
                 </div>
 
-                {/* Recent Adventures */}
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-2xl font-bold text-foreground">Recent Adventures</h2>
+                {/* Recent Adventures Section */}
+                <div className="animate-fade-in">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h2 className="text-2xl md:text-3xl font-bold text-foreground">Your Trips</h2>
+                      <p className="text-sm text-muted-foreground mt-1">Active, planned, and completed adventures</p>
+                    </div>
                     <Button
                       variant="outline"
                       size="sm"
@@ -198,35 +223,48 @@ const Dashboard = () => {
                       <Icon name="ChevronRight" size={16} />
                     </Button>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {mockTrips?.map((trip) =>
-                      <TripCard key={trip?.id} trip={trip} />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {mockTrips?.slice(0, 4).map((trip, idx) =>
+                      <div key={trip?.id} style={{ animationDelay: `${idx * 50}ms` }} className="animate-fade-in">
+                        <TripCard trip={trip} />
+                      </div>
                     )}
                   </div>
                 </div>
 
                 {/* Trending Destinations */}
-                <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-4">Trending Destinations for You</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {trendingDestinations?.map((destination) =>
-                      <TrendingDestinationCard key={destination?.id} destination={destination} />
+                <div className="animate-fade-in">
+                  <div className="mb-6">
+                    <h2 className="text-2xl md:text-3xl font-bold text-foreground">Trending Destinations for You</h2>
+                    <p className="text-sm text-muted-foreground mt-1">Discover popular travel spots and get inspired</p>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {trendingDestinations?.map((destination, idx) =>
+                      <div key={destination?.id} style={{ animationDelay: `${idx * 100}ms` }} className="animate-fade-in">
+                        <TrendingDestinationCard destination={destination} />
+                      </div>
                     )}
                   </div>
                 </div>
               </div>
 
               {/* Right Sidebar */}
-              <div className="space-y-6">
-                <div className="sticky top-24 space-y-6">
+              <div className="space-y-8">
+                <div className="sticky top-24 space-y-8">
                   {/* Budget Overview */}
-                  <BudgetOverviewCard budgetData={budgetData} />
+                  <div className="animate-fade-in" style={{ animationDelay: '200ms' }}>
+                    <BudgetOverviewCard budgetData={budgetData} />
+                  </div>
 
                 {/* Quick Tools */}
-                <QuickToolsCard />
+                <div className="animate-fade-in" style={{ animationDelay: '300ms' }}>
+                  <QuickToolsCard />
+                </div>
 
                   {/* Community */}
-                  <CommunityCard />
+                  <div className="animate-fade-in" style={{ animationDelay: '400ms' }}>
+                    <CommunityCard />
+                  </div>
                 </div>
               </div>
             </div>

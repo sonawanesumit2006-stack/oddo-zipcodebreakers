@@ -38,46 +38,52 @@ export default function Settings() {
     <div className="min-h-screen bg-background">
       <SidebarNavigation isCollapsed={isSidebarCollapsed} />
       <main className={`transition-smooth ${isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-60'}`}>
-        <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
-            <div className="flex items-center gap-3 mb-4">
-              <Icon name="Settings" size={24} />
+        <div className="max-w-6xl mx-auto p-6 md:p-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2 animate-fade-in">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg">
+                <Icon name="Settings" size={28} className="text-white" />
+              </div>
               <div>
-                <h1 className="text-2xl font-semibold text-foreground">Settings</h1>
-                <p className="text-sm text-muted-foreground">Manage your account preferences and application settings.</p>
+                <h1 className="text-3xl md:text-4xl font-bold text-foreground">Settings</h1>
+                <p className="text-sm text-muted-foreground mt-1">Manage your account preferences and application settings.</p>
               </div>
             </div>
 
-            <div className="bg-card p-6 rounded-xl shadow-sm">
-              <h2 className="text-lg font-semibold mb-4 text-foreground">Account</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1 text-muted-foreground">Display name</label>
+            <div className="bg-card p-8 rounded-2xl shadow-sm border border-border/50 hover:shadow-md transition-all duration-300">
+              <h2 className="text-lg font-bold mb-6 text-foreground flex items-center gap-2">
+                <Icon name="User" size={20} /> Account Details
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="animate-fade-in" style={{ animationDelay: '100ms' }}>
+                  <label className="block text-sm font-semibold mb-2 text-muted-foreground uppercase tracking-wide">Display name</label>
                   <input
-                    className="w-full px-3 py-2 rounded border border-border focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+                    className="w-full px-4 py-3 rounded-lg border border-border focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-all text-foreground placeholder:text-muted-foreground bg-background/50 hover:border-border/80"
                     value={settings.name}
                     onChange={(e) => update({ name: e.target.value })}
                   />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium mb-1 text-muted-foreground">Email</label>
+                <div className="animate-fade-in" style={{ animationDelay: '150ms' }}>
+                  <label className="block text-sm font-semibold mb-2 text-muted-foreground uppercase tracking-wide">Email</label>
                   <input
-                    className="w-full px-3 py-2 rounded border border-border focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+                    className="w-full px-4 py-3 rounded-lg border border-border focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-all text-foreground placeholder:text-muted-foreground bg-background/50 hover:border-border/80"
                     value={settings.email}
                     onChange={(e) => update({ email: e.target.value })}
                   />
                 </div>
               </div>
 
-              <div className="mt-6">
-                <h3 className="text-md font-medium mb-3 text-foreground">Preferences</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-1 text-muted-foreground">Theme</label>
+              <div className="mt-8 pt-8 border-t border-border">
+                <h3 className="text-lg font-bold mb-6 text-foreground flex items-center gap-2">
+                  <Icon name="Palette" size={20} /> Preferences
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="animate-fade-in" style={{ animationDelay: '200ms' }}>
+                    <label className="block text-sm font-semibold mb-3 text-muted-foreground uppercase tracking-wide">Theme</label>
                     <div className="flex items-center gap-3">
                       <select
-                        className="px-3 py-2 rounded border border-border focus:ring-2 focus:ring-primary/20 text-foreground"
+                        className="px-4 py-3 rounded-lg border border-border focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-all text-foreground bg-background/50 hover:border-border/80"
                         value={settings.theme}
                         onChange={(e) => update({ theme: e.target.value })}
                       >
@@ -86,19 +92,19 @@ export default function Settings() {
                       </select>
 
                       <button
-                        className="inline-flex items-center gap-2 px-3 py-2 rounded border border-border bg-transparent"
+                        className="inline-flex items-center gap-2 px-4 py-3 rounded-lg border border-border bg-transparent hover:bg-muted/20 transition-all"
                         onClick={() => update({ theme: settings.theme === 'dark' ? 'light' : 'dark' })}
                         aria-label="Toggle theme"
                         title="Toggle theme"
                       >
                         {settings.theme === 'dark' ? (
                           <>
-                            <Icon name="Sun" size={16} />
+                            <Icon name="Sun" size={18} />
                             <span className="text-sm text-foreground">Light</span>
                           </>
                         ) : (
                           <>
-                            <Icon name="Moon" size={16} />
+                            <Icon name="Moon" size={18} />
                             <span className="text-sm text-foreground">Dark</span>
                           </>
                         )}
@@ -106,17 +112,17 @@ export default function Settings() {
                     </div>
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Notifications</label>
-                    <div className="flex items-center gap-3 mt-2">
+                  <div className="animate-fade-in" style={{ animationDelay: '250ms' }}>
+                    <label className="block text-sm font-semibold mb-3 text-muted-foreground uppercase tracking-wide">Notifications</label>
+                    <div className="flex items-center gap-3">
                       <input
                         id="notif"
                         type="checkbox"
-                        className="h-4 w-4"
+                        className="h-5 w-5 rounded cursor-pointer accent-primary"
                         checked={settings.notifications}
                         onChange={(e) => update({ notifications: e.target.checked })}
                       />
-                      <label htmlFor="notif" className="text-sm text-muted-foreground">
+                      <label htmlFor="notif" className="text-sm text-foreground cursor-pointer">
                         Enable notifications
                       </label>
                     </div>
@@ -124,7 +130,7 @@ export default function Settings() {
                 </div>
               </div>
 
-              <div className="mt-6 flex gap-3">
+              <div className="mt-8 flex gap-3">
                 <Button
                   variant="default"
                   onClick={() => {
@@ -132,8 +138,9 @@ export default function Settings() {
                     window?.toast?.success?.('Settings saved');
                     if (!window?.toast) alert('Settings saved');
                   }}
+                  className="shadow-lg"
                 >
-                  Save
+                  Save Changes
                 </Button>
 
                 <Button
@@ -149,25 +156,44 @@ export default function Settings() {
             </div>
           </div>
 
-          <aside className="space-y-4">
-            <div className="bg-card border border-border rounded-xl p-4">
-              <div className="flex items-center gap-3">
-                <div className="w-14 h-14 rounded-full bg-primary flex items-center justify-center text-white text-xl font-bold">TE</div>
+          <aside className="space-y-8 animate-fade-in" style={{ animationDelay: '300ms' }}>
+            <div className="bg-gradient-to-br from-primary/10 to-secondary/10 border border-border rounded-2xl p-6 backdrop-blur-sm">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white text-2xl font-bold shadow-lg">TE</div>
                 <div>
-                  <div className="font-medium text-foreground">{settings.name}</div>
+                  <div className="font-bold text-foreground text-lg">{settings.name}</div>
                   <div className="text-sm text-muted-foreground">{settings.email}</div>
                 </div>
               </div>
 
-              <div className="mt-4 space-y-2">
-                <button className="w-full text-left text-sm text-primary underline">Change password</button>
-                <button className="w-full text-left text-sm text-muted-foreground">Manage connected accounts</button>
+              <div className="mt-6 space-y-3 border-t border-border pt-6">
+                <button className="w-full text-left text-sm text-primary font-medium hover:underline transition-all flex items-center gap-2">
+                  <Icon name="Lock" size={16} /> Change password
+                </button>
+                <button className="w-full text-left text-sm text-muted-foreground hover:text-foreground transition-all flex items-center gap-2">
+                  <Icon name="Link" size={16} /> Manage connected accounts
+                </button>
               </div>
             </div>
 
-            <div className="bg-card border border-border rounded-xl p-4">
-              <h4 className="text-sm font-semibold mb-2">Appearance</h4>
-              <div className="text-sm text-muted-foreground">Toggle theme to switch between light and dark mode.</div>
+            <div className="bg-card border border-border rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                  <Icon name="Palette" size={20} className="text-primary" />
+                </div>
+                <h4 className="text-sm font-bold text-foreground">Theme Customization</h4>
+              </div>
+              <div className="text-sm text-muted-foreground leading-relaxed">Toggle between light and dark mode to customize your experience. Your preference is saved automatically.</div>
+            </div>
+
+            <div className="bg-card border border-border rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                  <Icon name="Bell" size={20} className="text-primary" />
+                </div>
+                <h4 className="text-sm font-bold text-foreground">Notifications</h4>
+              </div>
+              <div className="text-sm text-muted-foreground leading-relaxed">Get updates about your trips, community activity, and important reminders when notifications are enabled.</div>
             </div>
           </aside>
         </div>

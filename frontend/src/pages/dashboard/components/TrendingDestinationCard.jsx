@@ -8,7 +8,7 @@ const TrendingDestinationCard = ({ destination }) => {
 
   return (
     <>
-      <div className="relative bg-card rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all cursor-pointer group h-64">
+      <div className="relative bg-card rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all cursor-pointer group h-64 hover:scale-105 duration-300 animate-fade-in border border-border/30 hover:border-border/60">
         <div className="relative h-full">
           <Image
             src={destination?.image}

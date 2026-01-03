@@ -53,7 +53,7 @@ const PostCard = ({ post, onUpdate }) => {
   };
 
   return (
-    <div className="bg-card rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
+    <div className="bg-card rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all duration-300 hover:scale-102 border border-border/50 hover:border-border animate-fade-in">
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white shadow-md">{post.author?.[0]}</div>
