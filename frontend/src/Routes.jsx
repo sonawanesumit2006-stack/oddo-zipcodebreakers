@@ -34,6 +34,11 @@ const Routes = () => {
           <Route path="/my-trips" element={<MyTrips />} />
           <Route path="/trip-detail" element={<TripDetail />} />
           <Route path="/trip/share/:tripId" element={<JoinTrip />} />
+          {/* Community and settings routes */}
+          <Route path="/community" element={<Community />} />
+          <Route path="/community/post/:id" element={<PostDetails />} />
+          <Route path="/community/events" element={<EventsList />} />
+          <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<NotFound />} />
         </RouterRoutes>
       </ErrorBoundary>
