@@ -8,7 +8,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from .routers import google_auth # Import new router
 
+from fastapi.staticfiles import StaticFiles
+
 app = FastAPI(lifespan=lifespan)
+# Serve Uploads
+app.mount("/static", StaticFiles(directory="App/uploads"), name="static")
 # This encrypts cookies so we can safely store the "state" during the Google dance
 app.add_middleware(SessionMiddleware, secret_key=settings.secret_key)
 origins = [
