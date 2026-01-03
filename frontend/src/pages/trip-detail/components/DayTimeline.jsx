@@ -25,7 +25,7 @@ const DayTimeline = ({ day, onAddActivity, onEditActivity, onDeleteActivity }) =
             <div className="text-right">
               <p className="text-xs text-white/80">Total Cost</p>
               <p className="text-xl md:text-2xl font-bold text-white whitespace-nowrap">
-                ${totalCost?.toLocaleString()}
+                ₹{totalCost?.toLocaleString()}
               </p>
             </div>
           </div>
