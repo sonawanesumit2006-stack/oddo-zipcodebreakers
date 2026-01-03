@@ -22,96 +22,96 @@ const MyTrips = () => {
   });
 
   const mockTrips = [
-  {
-    id: 1,
-    title: "Rajasthan Heritage Tour 2026",
-    image: "https://images.unsplash.com/photo-1619663157564-ef32b3dfe257",
-    imageAlt: "Aerial view of Jaipur Pink City with historic forts, palaces, and traditional Rajasthani architecture under blue sky",
-    cities: ["Jaipur", "Udaipur", "Jodhpur"],
-    startDate: "2026-06-15",
-    endDate: "2026-06-30",
-    duration: 15,
-    totalBudget: 5000,
-    spent: 3200,
-    status: "planned",
-    completionPercentage: 45,
-    createdDate: "2026-01-02"
-  },
-  {
-    id: 2,
-    title: "South India Temple Trail",
-    image: "https://images.unsplash.com/photo-1727993995329-fe20d4f65972",
-    imageAlt: "Magnificent Meenakshi Temple with colorful gopuram towers and intricate South Indian temple architecture at sunset",
-    cities: ["Chennai", "Madurai", "Kanyakumari"],
-    startDate: "2026-03-10",
-    endDate: "2026-03-25",
-    duration: 15,
-    totalBudget: 4200,
-    spent: 4100,
-    status: "active",
-    completionPercentage: 75,
-    createdDate: "2025-12-15"
-  },
-  {
-    id: 3,
-    title: "Goa Beach Retreat",
-    image: "https://images.unsplash.com/photo-1586971265827-96808ac11d74",
-    imageAlt: "Pristine Goa beach with golden sand, swaying palm trees, and turquoise Arabian Sea waters at golden hour",
-    cities: ["North Goa", "South Goa"],
-    startDate: "2025-11-20",
-    endDate: "2025-11-28",
-    duration: 8,
-    totalBudget: 3000,
-    spent: 3000,
-    status: "completed",
-    completionPercentage: 100,
-    createdDate: "2025-10-01"
-  },
-  {
-    id: 4,
-    title: "Himalayan Adventure",
-    image: "https://images.unsplash.com/photo-1622172327433-fff482ffd21b",
-    imageAlt: "Majestic snow-capped Himalayan peaks with colorful Buddhist prayer flags and mountain monastery in foreground",
-    cities: ["Manali", "Leh", "Dharamshala"],
-    startDate: "2026-04-05",
-    endDate: "2026-04-18",
-    duration: 13,
-    totalBudget: 6500,
-    spent: 1200,
-    status: "planned",
-    completionPercentage: 20,
-    createdDate: "2025-12-28"
-  },
-  {
-    id: 5,
-    title: "Kerala Backwaters Journey",
-    image: "https://images.unsplash.com/photo-1634141693341-9d51836aa188",
-    imageAlt: "Traditional Kerala houseboat on tranquil backwaters with coconut palms and lush tropical greenery reflected in water",
-    cities: ["Kochi", "Alleppey", "Munnar"],
-    startDate: "2026-08-12",
-    endDate: "2026-08-28",
-    duration: 16,
-    totalBudget: 7200,
-    spent: 0,
-    status: "planned",
-    completionPercentage: 10,
-    createdDate: "2026-01-01"
-  },
-  {
-    id: 6,
-    title: "Northeast India Discovery",
-    image: "https://images.unsplash.com/photo-1682134936734-6cc2a4258a77",
-    imageAlt: "Lush green valleys and misty mountains of Northeast India with traditional tribal villages and terraced fields",
-    cities: ["Shillong", "Kaziranga"],
-    startDate: "2026-02-14",
-    endDate: "2026-02-26",
-    duration: 12,
-    totalBudget: 5800,
-    spent: 5600,
-    status: "active",
-    completionPercentage: 85,
-    createdDate: "2025-11-20"
-  }];
+    {
+      id: 1,
+      title: "Rajasthan Heritage Tour 2026",
+      image: "https://images.unsplash.com/photo-1619663157564-ef32b3dfe257",
+      imageAlt: "Aerial view of Jaipur Pink City with historic forts, palaces, and traditional Rajasthani architecture under blue sky",
+      cities: ["Jaipur", "Udaipur", "Jodhpur"],
+      startDate: "2026-06-15",
+      endDate: "2026-06-30",
+      duration: 15,
+      totalBudget: 5000,
+      spent: 3200,
+      status: "planned",
+      completionPercentage: 45,
+      createdDate: "2026-01-02"
+    },
+    {
+      id: 2,
+      title: "South India Temple Trail",
+      image: "https://images.unsplash.com/photo-1727993995329-fe20d4f65972",
+      imageAlt: "Magnificent Meenakshi Temple with colorful gopuram towers and intricate South Indian temple architecture at sunset",
+      cities: ["Chennai", "Madurai", "Kanyakumari"],
+      startDate: "2026-03-10",
+      endDate: "2026-03-25",
+      duration: 15,
+      totalBudget: 4200,
+      spent: 4100,
+      status: "active",
+      completionPercentage: 75,
+      createdDate: "2025-12-15"
+    },
+    {
+      id: 3,
+      title: "Goa Beach Retreat",
+      image: "https://images.unsplash.com/photo-1586971265827-96808ac11d74",
+      imageAlt: "Pristine Goa beach with golden sand, swaying palm trees, and turquoise Arabian Sea waters at golden hour",
+      cities: ["North Goa", "South Goa"],
+      startDate: "2025-11-20",
+      endDate: "2025-11-28",
+      duration: 8,
+      totalBudget: 3000,
+      spent: 3000,
+      status: "completed",
+      completionPercentage: 100,
+      createdDate: "2025-10-01"
+    },
+    {
+      id: 4,
+      title: "Himalayan Adventure",
+      image: "https://images.unsplash.com/photo-1622172327433-fff482ffd21b",
+      imageAlt: "Majestic snow-capped Himalayan peaks with colorful Buddhist prayer flags and mountain monastery in foreground",
+      cities: ["Manali", "Leh", "Dharamshala"],
+      startDate: "2026-04-05",
+      endDate: "2026-04-18",
+      duration: 13,
+      totalBudget: 6500,
+      spent: 1200,
+      status: "planned",
+      completionPercentage: 20,
+      createdDate: "2025-12-28"
+    },
+    {
+      id: 5,
+      title: "Kerala Backwaters Journey",
+      image: "https://images.unsplash.com/photo-1634141693341-9d51836aa188",
+      imageAlt: "Traditional Kerala houseboat on tranquil backwaters with coconut palms and lush tropical greenery reflected in water",
+      cities: ["Kochi", "Alleppey", "Munnar"],
+      startDate: "2026-08-12",
+      endDate: "2026-08-28",
+      duration: 16,
+      totalBudget: 7200,
+      spent: 0,
+      status: "planned",
+      completionPercentage: 10,
+      createdDate: "2026-01-01"
+    },
+    {
+      id: 6,
+      title: "Northeast India Discovery",
+      image: "https://images.unsplash.com/photo-1682134936734-6cc2a4258a77",
+      imageAlt: "Lush green valleys and misty mountains of Northeast India with traditional tribal villages and terraced fields",
+      cities: ["Shillong", "Kaziranga"],
+      startDate: "2026-02-14",
+      endDate: "2026-02-26",
+      duration: 12,
+      totalBudget: 5800,
+      spent: 5600,
+      status: "active",
+      completionPercentage: 85,
+      createdDate: "2025-11-20"
+    }];
 
 
   const filteredAndSortedTrips = useMemo(() => {
@@ -121,8 +121,8 @@ const MyTrips = () => {
       const searchLower = filters?.search?.toLowerCase();
       result = result?.filter(
         (trip) =>
-        trip?.title?.toLowerCase()?.includes(searchLower) ||
-        trip?.cities?.some((city) => city?.toLowerCase()?.includes(searchLower))
+          trip?.title?.toLowerCase()?.includes(searchLower) ||
+          trip?.cities?.some((city) => city?.toLowerCase()?.includes(searchLower))
       );
     }
 
@@ -199,18 +199,17 @@ const MyTrips = () => {
 
   const hasActiveFilters = () => {
     return filters?.search ||
-    filters?.status !== 'all' ||
-    filters?.dateFrom ||
-    filters?.dateTo ||
-    filters?.budgetMin || filters?.budgetMax;
+      filters?.status !== 'all' ||
+      filters?.dateFrom ||
+      filters?.dateTo ||
+      filters?.budgetMin || filters?.budgetMax;
   };
 
   return (
     <div className="min-h-screen bg-background">
       <SidebarNavigation isCollapsed={isSidebarCollapsed} />
       <main
-        className={`transition-smooth pt-20 lg:pt-0 ${
-        isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-60'}`
+        className={`transition-smooth pt-20 lg:pt-0 ${isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-60'}`
         }>
 
         <div className="p-4 md:p-6 lg:p-8">
@@ -227,7 +226,7 @@ const MyTrips = () => {
                 size="lg"
                 iconName="Plus"
                 iconPosition="left"
-                onClick={() => navigate('/dashboard')}>
+                onClick={() => navigate('/plan-trip')}>
 
                 Create New Trip
               </Button>
@@ -255,12 +254,12 @@ const MyTrips = () => {
               </div>
 
               {filteredAndSortedTrips?.length === 0 ?
-              <EmptyState hasFilters={hasActiveFilters()} onClearFilters={handleClearFilters} /> :
+                <EmptyState hasFilters={hasActiveFilters()} onClearFilters={handleClearFilters} /> :
 
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-5 lg:gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-5 lg:gap-6">
                   {filteredAndSortedTrips?.map((trip) =>
-                <TripCard key={trip?.id} trip={trip} />
-                )}
+                    <TripCard key={trip?.id} trip={trip} />
+                  )}
                 </div>
               }
             </div>
