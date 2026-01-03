@@ -266,44 +266,44 @@ const LandingPage = () => {
             </section>
 
             {/* Stats / CTA Section */}
-            <section className="py-24 bg-gray-900 text-white relative overflow-hidden">
+            <section className="py-24 bg-[#0F172A] text-white relative overflow-hidden">
                 {/* Abstract Background */}
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
-                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2"></div>
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
+                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2"></div>
 
                 <div className="container mx-auto px-6 relative z-10">
                     <div className="flex flex-col lg:flex-row items-center justify-between gap-16">
                         <div className="lg:w-1/2">
-                            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                                Ready to start your next adventure?
+                            <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+                                Ready to start your <br />next adventure?
                             </h2>
                             <p className="text-gray-400 text-lg mb-8 max-w-md">
                                 Join over 50,000 travelers who are planning smarter, exploring further, and spending less.
                             </p>
                             <button
                                 onClick={() => navigate('/signup')}
-                                className="bg-white text-gray-900 px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl hover:scale-105"
+                                className="bg-white text-[#0F172A] px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl hover:scale-105"
                             >
                                 Create Free Account
                             </button>
                         </div>
 
                         <div className="lg:w-1/2 grid grid-cols-2 gap-4 w-full">
-                            <div className="bg-white/5 backdrop-blur-sm p-6 rounded-2xl border border-white/10">
+                            <div className="bg-white/5 backdrop-blur-sm p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
                                 <div className="text-3xl font-bold text-blue-400 mb-1">50k+</div>
-                                <div className="text-sm text-gray-400 uppercase tracking-widest">Active Users</div>
+                                <div className="text-sm text-gray-400 uppercase tracking-widest font-medium">Active Users</div>
                             </div>
-                            <div className="bg-white/5 backdrop-blur-sm p-6 rounded-2xl border border-white/10">
+                            <div className="bg-white/5 backdrop-blur-sm p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
                                 <div className="text-3xl font-bold text-purple-400 mb-1">120+</div>
-                                <div className="text-sm text-gray-400 uppercase tracking-widest">Countries</div>
+                                <div className="text-sm text-gray-400 uppercase tracking-widest font-medium">Countries</div>
                             </div>
-                            <div className="bg-white/5 backdrop-blur-sm p-6 rounded-2xl border border-white/10">
+                            <div className="bg-white/5 backdrop-blur-sm p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
                                 <div className="text-3xl font-bold text-cyan-400 mb-1">1M+</div>
-                                <div className="text-sm text-gray-400 uppercase tracking-widest">Itineraries</div>
+                                <div className="text-sm text-gray-400 uppercase tracking-widest font-medium">Itineraries</div>
                             </div>
-                            <div className="bg-white/5 backdrop-blur-sm p-6 rounded-2xl border border-white/10">
+                            <div className="bg-white/5 backdrop-blur-sm p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
                                 <div className="text-3xl font-bold text-yellow-400 mb-1">4.9</div>
-                                <div className="text-sm text-gray-400 uppercase tracking-widest">App Store Rating</div>
+                                <div className="text-sm text-gray-400 uppercase tracking-widest font-medium">App Store Rating</div>
                             </div>
                         </div>
                     </div>

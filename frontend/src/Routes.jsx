@@ -5,6 +5,7 @@ import ErrorBoundary from "components/ErrorBoundary";
 import NotFound from "pages/NotFound";
 import LandingPage from './pages/landing';
 import Login from './pages/login';
+import Signup from './pages/signup';
 import BudgetManagement from './pages/budget-management';
 import ActivityManagement from './pages/activity-management';
 import Dashboard from './pages/dashboard';
@@ -20,6 +21,7 @@ const Routes = () => {
           {/* Define your route here */}
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/budget-management" element={<BudgetManagement />} />
           <Route path="/activity-management" element={<ActivityManagement />} />
           <Route path="/dashboard" element={<Dashboard />} />
