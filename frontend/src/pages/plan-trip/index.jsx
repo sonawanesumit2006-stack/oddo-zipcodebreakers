@@ -5,9 +5,12 @@ import Button from '../../components/ui/Button';
 import Icon from '../../components/AppIcon';
 import Input from '../../components/ui/Input';
 
+import api from '../../api/axios';
+
 const PlanTrip = () => {
     const navigate = useNavigate();
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
         destination: '',
         startDate: '',
@@ -21,12 +24,29 @@ const PlanTrip = () => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // In a real app, this would save the trip to the backend
-        console.log("Trip Created:", formData);
-        alert("Trip created successfully! Redirecting to details...");
-        navigate('/trip-detail'); // Redirect to the newly created trip details
+        setIsLoading(true);
+
+        try {
+            const payload = {
+                destination: formData.destination,
+                start_date: formData.startDate,
+                end_date: formData.endDate,
+                travelers: parseInt(formData.travelers),
+                budget: parseFloat(formData.budget) || 0
+            };
+
+            await api.post('/trips/', payload);
+
+            alert("Trip created successfully!");
+            navigate('/my-trips'); // Redirect to trips list
+        } catch (error) {
+            console.error("Failed to create trip:", error);
+            alert("Failed to create trip. Please try again.");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -157,10 +177,11 @@ const PlanTrip = () => {
                                     variant="default"
                                     fullWidth
                                     type="submit"
-                                    iconName="ArrowRight"
+                                    disabled={isLoading}
+                                    iconName={isLoading ? "Loader" : "ArrowRight"}
                                     iconPosition="right"
                                 >
-                                    Create Trip
+                                    {isLoading ? "Creating..." : "Create Trip"}
                                 </Button>
                             </div>
 

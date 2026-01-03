@@ -12,13 +12,12 @@ router = APIRouter(prefix="/trips", tags=["Trips"])
 # --- Pydantic Models for Requests ---
 from pydantic import BaseModel
 
-class TripCreate(BaseModel):
-    title: str
-    description: Optional[str] = None
-    start_date: Optional[date] = None
-    end_date: Optional[date] = None
-    budget_limit: float = 0.0
-    is_public: bool = False
+class TripCreateSchema(BaseModel):
+    destination: str
+    start_date: date
+    end_date: date
+    travelers: int = 1
+    budget: float = 0.0
 
 class StopCreate(BaseModel):
     city_id: int
@@ -38,14 +37,24 @@ class ActivityCreate(BaseModel):
 
 @router.post("/", response_model=Trip)
 def create_trip(
-    trip_data: TripCreate, 
+    trip_data: TripCreateSchema, 
     session: Session = Depends(get_session),
     current_user: User = Depends(get_current_user)
 ):
+    # Auto-generate Title
+    generated_title = f"Trip to {trip_data.destination}"
+
     new_trip = Trip(
-        **trip_data.dict(),
-        owner_id=current_user.id
+        title=generated_title,
+        destination_cache=trip_data.destination,
+        start_date=trip_data.start_date,
+        end_date=trip_data.end_date,
+        travelers=trip_data.travelers,
+        budget_limit=trip_data.budget,
+        owner_id=current_user.id,
+        # Default status is PLANNING via Model
     )
+    
     session.add(new_trip)
     session.commit()
     session.refresh(new_trip)

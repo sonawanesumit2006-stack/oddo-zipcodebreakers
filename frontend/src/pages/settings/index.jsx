@@ -1,38 +1,62 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import SidebarNavigation from '../../components/ui/SidebarNavigation';
 import Icon from '../../components/AppIcon';
 import Button from '../../components/ui/Button';
 
-const DEFAULT = {
-  name: 'Travel Explorer',
-  email: 'explorer@globetrotter.com',
+const DEFAULT_PREFERENCES = {
   theme: 'light',
   notifications: true,
 };
 
 export default function Settings() {
-  const [settings, setSettings] = useState(DEFAULT);
+  const navigate = useNavigate();
+  const [user, setUser] = useState({
+    name: 'Guest User',
+    email: 'guest@example.com',
+    avatar_url: null
+  });
+  const [preferences, setPreferences] = useState(DEFAULT_PREFERENCES);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   useEffect(() => {
-    const raw = localStorage.getItem('gt_settings');
-    if (raw) {
+    // Load User
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
       try {
-        setSettings(JSON.parse(raw));
+        setUser(JSON.parse(storedUser));
+      } catch (e) {
+        console.error("Failed to parse user", e);
+      }
+    }
+
+    // Load Preferences
+    const rawPrefs = localStorage.getItem('gt_preferences');
+    if (rawPrefs) {
+      try {
+        setPreferences(JSON.parse(rawPrefs));
       } catch {
-        setSettings(DEFAULT);
+        setPreferences(DEFAULT_PREFERENCES);
       }
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('gt_settings', JSON.stringify(settings));
-    if (settings.theme === 'dark') document.documentElement.classList.add('dark');
+    localStorage.setItem('gt_preferences', JSON.stringify(preferences));
+    if (preferences.theme === 'dark') document.documentElement.classList.add('dark');
     else document.documentElement.classList.remove('dark');
-  }, [settings]);
+  }, [preferences]);
 
-  const update = (patch) => setSettings((s) => ({ ...s, ...patch }));
+  const updatePreferences = (patch) => setPreferences((s) => ({ ...s, ...patch }));
 
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const handleLogout = () => {
+    if (window.confirm("Are you sure you want to logout?")) {
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('isAuthenticated');
+      navigate('/login');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -59,8 +83,9 @@ export default function Settings() {
                   <label className="block text-sm font-semibold mb-2 text-muted-foreground uppercase tracking-wide">Display name</label>
                   <input
                     className="w-full px-4 py-3 rounded-lg border border-border focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-all text-foreground placeholder:text-muted-foreground bg-background/50 hover:border-border/80"
-                    value={settings.name}
-                    onChange={(e) => update({ name: e.target.value })}
+                    value={user.name}
+                    readOnly
+                  // Editable logic would require backend update
                   />
                 </div>
 
@@ -68,8 +93,8 @@ export default function Settings() {
                   <label className="block text-sm font-semibold mb-2 text-muted-foreground uppercase tracking-wide">Email</label>
                   <input
                     className="w-full px-4 py-3 rounded-lg border border-border focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-all text-foreground placeholder:text-muted-foreground bg-background/50 hover:border-border/80"
-                    value={settings.email}
-                    onChange={(e) => update({ email: e.target.value })}
+                    value={user.email}
+                    readOnly
                   />
                 </div>
               </div>
@@ -84,8 +109,8 @@ export default function Settings() {
                     <div className="flex items-center gap-3">
                       <select
                         className="px-4 py-3 rounded-lg border border-border focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-all text-foreground bg-background/50 hover:border-border/80"
-                        value={settings.theme}
-                        onChange={(e) => update({ theme: e.target.value })}
+                        value={preferences.theme}
+                        onChange={(e) => updatePreferences({ theme: e.target.value })}
                       >
                         <option value="light">Light</option>
                         <option value="dark">Dark</option>
@@ -93,11 +118,11 @@ export default function Settings() {
 
                       <button
                         className="inline-flex items-center gap-2 px-4 py-3 rounded-lg border border-border bg-transparent hover:bg-muted/20 transition-all"
-                        onClick={() => update({ theme: settings.theme === 'dark' ? 'light' : 'dark' })}
+                        onClick={() => updatePreferences({ theme: preferences.theme === 'dark' ? 'light' : 'dark' })}
                         aria-label="Toggle theme"
                         title="Toggle theme"
                       >
-                        {settings.theme === 'dark' ? (
+                        {preferences.theme === 'dark' ? (
                           <>
                             <Icon name="Sun" size={18} />
                             <span className="text-sm text-foreground">Light</span>
@@ -119,8 +144,8 @@ export default function Settings() {
                         id="notif"
                         type="checkbox"
                         className="h-5 w-5 rounded cursor-pointer accent-primary"
-                        checked={settings.notifications}
-                        onChange={(e) => update({ notifications: e.target.checked })}
+                        checked={preferences.notifications}
+                        onChange={(e) => updatePreferences({ notifications: e.target.checked })}
                       />
                       <label htmlFor="notif" className="text-sm text-foreground cursor-pointer">
                         Enable notifications
@@ -130,27 +155,16 @@ export default function Settings() {
                 </div>
               </div>
 
-              <div className="mt-8 flex gap-3">
+              <div className="mt-8 flex gap-3 pt-4 border-t border-border">
                 <Button
-                  variant="default"
-                  onClick={() => {
-                    localStorage.setItem('gt_settings', JSON.stringify(settings));
-                    window?.toast?.success?.('Settings saved');
-                    if (!window?.toast) alert('Settings saved');
-                  }}
-                  className="shadow-lg"
+                  variant="default" // Using default style but red color via className if supported, or just distinct
+                  className="bg-red-600 hover:bg-red-700 text-white shadow-lg border-red-600"
+                  onClick={handleLogout}
                 >
-                  Save Changes
-                </Button>
-
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    localStorage.removeItem('gt_settings');
-                    setSettings(DEFAULT);
-                  }}
-                >
-                  Reset
+                  <div className="flex items-center gap-2">
+                    <Icon name="LogOut" size={18} />
+                    Logout
+                  </div>
                 </Button>
               </div>
             </div>
@@ -159,10 +173,20 @@ export default function Settings() {
           <aside className="space-y-8 animate-fade-in" style={{ animationDelay: '300ms' }}>
             <div className="bg-gradient-to-br from-primary/10 to-secondary/10 border border-border rounded-2xl p-6 backdrop-blur-sm">
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white text-2xl font-bold shadow-lg">TE</div>
+                <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center overflow-hidden shadow-lg border-2 border-white">
+                  {user.avatar_url ? (
+                    <img
+                      src={user.avatar_url.startsWith('http') ? user.avatar_url : `http://localhost:8000${user.avatar_url}`}
+                      alt={user.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-white text-2xl font-bold">{user.name.charAt(0).toUpperCase()}</span>
+                  )}
+                </div>
                 <div>
-                  <div className="font-bold text-foreground text-lg">{settings.name}</div>
-                  <div className="text-sm text-muted-foreground">{settings.email}</div>
+                  <div className="font-bold text-foreground text-lg">{user.name}</div>
+                  <div className="text-sm text-muted-foreground">{user.email}</div>
                 </div>
               </div>
 
@@ -184,16 +208,6 @@ export default function Settings() {
                 <h4 className="text-sm font-bold text-foreground">Theme Customization</h4>
               </div>
               <div className="text-sm text-muted-foreground leading-relaxed">Toggle between light and dark mode to customize your experience. Your preference is saved automatically.</div>
-            </div>
-
-            <div className="bg-card border border-border rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                  <Icon name="Bell" size={20} className="text-primary" />
-                </div>
-                <h4 className="text-sm font-bold text-foreground">Notifications</h4>
-              </div>
-              <div className="text-sm text-muted-foreground leading-relaxed">Get updates about your trips, community activity, and important reminders when notifications are enabled.</div>
             </div>
           </aside>
         </div>
