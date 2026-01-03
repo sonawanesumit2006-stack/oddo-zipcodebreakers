@@ -7,6 +7,7 @@ from .routers import auth  # Import auth
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from .routers import google_auth # Import new router
+from .routers import trips # Import trips router
 
 from fastapi.staticfiles import StaticFiles
 
@@ -30,6 +31,7 @@ app.add_middleware(
 # app.include_router(items.router)
 app.include_router(google_auth.router)
 app.include_router(auth.router) # Plug it in
+app.include_router(trips.router) # Register Trips Router
 
 # Expose a simple HTTP Bearer (JWT) security scheme in the OpenAPI docs so
 # the Swagger "Authorize" modal accepts a raw token (Authorization: Bearer <token>).

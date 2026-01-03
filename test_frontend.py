@@ -9,94 +9,63 @@ def index():
     return """
     <html>
         <head>
-            <title>Globe Trotter Auth Test</title>
+            <title>Globe Trotter Phase 2</title>
             <style>
-                body { font-family: 'Segoe UI', sans-serif; display: flex; gap: 20px; justify-content: center; padding: 50px; background-color: #f0f2f5; }
-                .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 300px; }
-                h2 { color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-                input { width: 100%; padding: 8px; margin: 5px 0 15px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
-                button { width: 100%; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+                body { font-family: 'Segoe UI', sans-serif; display: flex; gap: 20px; padding: 20px; background-color: #f0f2f5; flex-wrap: wrap; }
+                .card { background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 300px; margin-bottom: 20px; }
+                h2 { color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+                input { width: 100%; padding: 8px; margin: 5px 0 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+                button { width: 100%; padding: 8px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-bottom: 10px; }
                 button:hover { background-color: #45a049; }
-                .google-btn { background-color: #4285F4; margin-top: 10px; }
-                .google-btn:hover { background-color: #357ae8; }
-                label { font-size: 0.9em; color: #666; font-weight: bold; }
-                #result { margin-top: 20px; padding: 10px; background: #e8f5e9; border: 1px solid #c8e6c9; border-radius: 4px; display: none; word-wrap: break-word; }
-                img.avatar { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-top: 10px; border: 2px solid #4CAF50; }
+                button.secondary { background-color: #008CBA; }
+                .google-btn { background-color: #4285F4; }
+                label { font-size: 0.8em; color: #666; font-weight: bold; }
+                #result, #tripsList { margin-top: 20px; padding: 10px; background: #e8f5e9; border: 1px solid #c8e6c9; border-radius: 4px; word-wrap: break-word; font-family: monospace; font-size: 0.9em; }
+                img.avatar { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid #4CAF50; float: right; }
+                .trip-item { background: #fff; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 4px; }
             </style>
         </head>
         <body>
-            <!-- REGISTER FORM -->
-            <div class="card">
-                <h2>Register</h2>
-                <!-- enctype required for file upload -->
-                <form id="registerForm" onsubmit="handleRegister(event)" enctype="multipart/form-data">
-                    <label>Name</label> <input type="text" name="name" required placeholder="John Doe">
-                    <label>Username</label> <input type="text" name="username" required placeholder="johndoe">
-                    <label>Email</label> <input type="email" name="email" required placeholder="john@example.com">
-                    <label>Password</label> <input type="password" name="password" required>
-                    <label>Bio (Optional)</label> <input type="text" name="bio" placeholder="I love travel">
-                    <label>Home City (Optional)</label> <input type="text" name="home_city" placeholder="New York">
-                    
-                    <label>Profile Picture (Optional)</label> 
-                    <input type="file" name="avatar_file" accept="image/*">
-                    
-                    <button type="submit">Register</button>
-                    <div id="registerMsg"></div>
-                </form>
-            </div>
-
-            <!-- LOGIN FORM -->
-            <div class="card">
-                <h2>Login</h2>
-                <form id="loginForm" onsubmit="handleLogin(event)">
-                    <!-- We label it Email, but the API expects 'username' key for OAuth2 -->
-                    <label>Email</label> <input type="email" name="username" required placeholder="john@example.com">
-                    <label>Password</label> <input type="password" name="password" required>
-                    <button type="submit">Login</button>
-                </form>
+            <!-- AUTH COLUMN -->
+            <div style="display:flex; flex-direction:column">
+                <div class="card">
+                    <h2>1. Login (Email)</h2>
+                    <form id="loginForm" onsubmit="handleLogin(event)">
+                        <label>Email</label> <input type="email" name="username" required placeholder="john@example.com">
+                        <label>Password</label> <input type="password" name="password" required>
+                        <button type="submit">Login</button>
+                    </form>
+                    <a href="http://localhost:8000/auth/google/login"><button class="google-btn">Google Login</button></a>
+                </div>
                 
-                <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
-                
-                <!-- GOOGLE LOGIN -->
-                <a href="http://localhost:8000/auth/google/login" style="text-decoration:none;">
-                    <button type="button" class="google-btn">Sign in with Google</button>
-                </a>
-            </div>
-
-            <!-- TOKEN DISPLAY -->
-            <div class="card">
-                <h2>Results</h2>
-                <div id="result">
-                    <strong>Logged in!</strong>
+                <div class="card">
+                    <h2>2. Current User</h2>
                     <div id="avatarContainer"></div>
-                    <p style="font-size: 0.8em">Token:</p>
-                    <code id="tokenDisplay"></code>
-                    <p style="font-size: 0.8em; margin-top: 10px;">User:</p>
-                    <pre id="userDisplay" style="font-size: 0.8em; text-align: left; overflow-x: auto;"></pre>
+                    <div id="userInfo">Not logged in</div>
+                    <input type="hidden" id="accessToken">
+                </div>
+            </div>
+
+            <!-- TRIPS COLUMN -->
+            <div style="display:flex; flex-direction:column">
+                <div class="card">
+                    <h2>3. Create Trip</h2>
+                    <form id="tripForm" onsubmit="handleCreateTrip(event)">
+                        <label>Title</label> <input type="text" name="title" required placeholder="Summer Vacay">
+                        <label>Budget</label> <input type="number" name="budget_limit" value="1000">
+                        <button type="submit" class="secondary">Create Trip</button>
+                    </form>
+                </div>
+
+                <div class="card" style="width: 400px;">
+                    <h2>4. My Trips</h2>
+                    <button onclick="fetchTrips()" class="secondary">Refresh List</button>
+                    <div id="tripsList">No trips loaded.</div>
                 </div>
             </div>
 
             <script>
-                async function handleRegister(e) {
-                    e.preventDefault();
-                    // FormData automatically handles file input
-                    const formData = new FormData(e.target);
-                    
-                    try {
-                        const res = await fetch('http://localhost:8000/register', {
-                            method: 'POST',
-                            // Do NOT set Content-Type header when using FormData with files; browser sets boundary
-                            body: formData 
-                        });
-                        const json = await res.json();
-                        if (!res.ok) throw new Error(json.detail || "Registration failed");
-                        
-                        alert(JSON.stringify(json, null, 2));
-                    } catch (err) {
-                        alert("Error: " + err.message);
-                    }
-                }
-
+                // --- AUTH ---
                 async function handleLogin(e) {
                     e.preventDefault();
                     const formData = new FormData(e.target);
@@ -108,33 +77,85 @@ def index():
                             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                             body: params
                         });
-                        if (!res.ok) {
-                            const err = await res.json();
-                            throw new Error(err.detail || "Login failed");
-                        }
+                        if (!res.ok) throw new Error((await res.json()).detail || "Login failed");
                         
                         const json = await res.json();
-                        document.getElementById('result').style.display = 'block';
-                        document.getElementById('tokenDisplay').innerText = json.access_token.substring(0, 20) + "...";
-                        document.getElementById('userDisplay').innerText = JSON.stringify(json.user, null, 2);
-                        
-                        // Display Avatar if exists
-                        const container = document.getElementById('avatarContainer');
-                        container.innerHTML = '';
-                        if (json.user.avatar_url) {
-                            // Backend returns /static/..., ensuring it points to localhost:8000
-                            const img = document.createElement('img');
-                            // Handle absolute vs relative URLs (Google Auth is absolute, Uploads are relative)
-                            const src = json.user.avatar_url.startsWith('http') 
-                                ? json.user.avatar_url 
-                                : 'http://localhost:8000' + json.user.avatar_url;
-                            img.src = src;
-                            img.className = 'avatar';
-                            container.appendChild(img);
-                        }
-                    } catch (err) {
-                        alert(err.message);
+                        setSession(json);
+                    } catch (err) { alert(err.message); }
+                }
+
+                function setSession(data) {
+                    document.getElementById('accessToken').value = data.access_token;
+                    
+                    // Display User
+                    const user = data.user;
+                    const container = document.getElementById('avatarContainer');
+                    container.innerHTML = '';
+                    if (user.avatar_url) {
+                        const img = document.createElement('img');
+                        img.src = user.avatar_url.startsWith('http') ? user.avatar_url : 'http://localhost:8000' + user.avatar_url;
+                        img.className = 'avatar';
+                        container.appendChild(img);
                     }
+                    document.getElementById('userInfo').innerHTML = `<strong>${user.name}</strong><br>${user.email}<br>ID: ${user.id}`;
+                    
+                    // Auto-fetch trips
+                    fetchTrips();
+                }
+
+                // --- TRIPS ---
+                function getHeaders() {
+                    const token = document.getElementById('accessToken').value;
+                    if (!token) { alert("Please login first!"); return null; }
+                    return { 
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    };
+                }
+
+                async function handleCreateTrip(e) {
+                    e.preventDefault();
+                    const headers = getHeaders();
+                    if (!headers) return;
+
+                    const formData = new FormData(e.target);
+                    const data = Object.fromEntries(formData.entries());
+
+                    try {
+                        const res = await fetch('http://localhost:8000/trips/', {
+                            method: 'POST',
+                            headers: headers,
+                            body: JSON.stringify(data)
+                        });
+                        if (!res.ok) throw new Error((await res.json()).detail);
+                        
+                        alert("Trip Created!");
+                        fetchTrips(); // Refresh list
+                    } catch (err) { alert("Error: " + err.message); }
+                }
+
+                async function fetchTrips() {
+                    const headers = getHeaders();
+                    if (!headers) return;
+
+                    try {
+                        const res = await fetch('http://localhost:8000/trips/', { headers: headers });
+                        const trips = await res.json();
+                        
+                        const list = document.getElementById('tripsList');
+                        if (trips.length === 0) {
+                            list.innerHTML = "No trips found.";
+                            return;
+                        }
+                        
+                        list.innerHTML = trips.map(t => `
+                            <div class="trip-item">
+                                <strong>${t.title}</strong>
+                                <span style="float:right; color: #888">$${t.budget_limit}</span>
+                                <br><small>ID: ${t.id} | ${t.is_public ? 'Public' : 'Private'}</small>
+                            </div>
+                        `).join('');
+                    } catch (err) { console.error(err); }
                 }
             </script>
         </body>
@@ -149,11 +170,14 @@ def callback(token: str):
         <body style="font-family: sans-serif; padding: 40px; text-align: center; background-color: #e6fffa;">
             <h1>✅ Google Login Successful!</h1>
             <p>Token: <code>{token}</code></p>
-            <p>Check the console or your backend for user details created/retrieved.</p>
+            <script>
+                // Quick hack: print to console for manual copying if needed
+                console.log("Token:", "{token}");
+            </script>
         </body>
     </html>
     """
 
 if __name__ == "__main__":
-    print("Running extended frontend simulator on http://localhost:5173")
+    print("Running Phase 2 Simulator on http://localhost:5173")
     uvicorn.run(app, host="127.0.0.1", port=5173)

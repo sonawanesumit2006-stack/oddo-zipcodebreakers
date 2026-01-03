@@ -1,14 +1,15 @@
 from sqlmodel import SQLModel, Field, Relationship
 from typing import Optional, List
-from datetime import date, time
+from datetime import date, time, datetime
 from enum import Enum
 
 # --- ENUMS ---
-class ActivityCategory(str, Enum):
+class ExpenseCategory(str, Enum):
+    TRANSPORT = "Transport"
     STAY = "Stay"
-    TRAVEL = "Travel"
     FOOD = "Food"
     ACTIVITY = "Activity"
+    OTHER = "Other"
 
 # --- USERS ---
 class User(SQLModel, table=True):
@@ -18,13 +19,13 @@ class User(SQLModel, table=True):
     email: str = Field(index=True, unique=True)
     hashed_password: str
     
-    # New Profile Fields
+    # Profile Fields
     avatar_url: Optional[str] = None
     bio: Optional[str] = None
     home_city: Optional[str] = None
     
     # Relationships
-    trips: List["Trip"] = Relationship(back_populates="user")
+    trips: List["Trip"] = Relationship(back_populates="owner")
 
 # --- MASTER DATA ---
 class City(SQLModel, table=True):
@@ -44,14 +45,15 @@ class Trip(SQLModel, table=True):
     description: Optional[str] = None
     start_date: Optional[date] = None
     end_date: Optional[date] = None
+    budget_limit: float = 0.0
     is_public: bool = False
-    budget_limit: Optional[float] = None
+    created_at: datetime = Field(default_factory=datetime.utcnow)
     
     # Foreign Key
-    user_id: int = Field(foreign_key="user.id")
+    owner_id: int = Field(foreign_key="user.id")
     
     # Relationships
-    user: User = Relationship(back_populates="trips")
+    owner: User = Relationship(back_populates="trips")
     stops: List["ItineraryStop"] = Relationship(back_populates="trip")
 
 class ItineraryStop(SQLModel, table=True):
@@ -76,11 +78,14 @@ class Activity(SQLModel, table=True):
     stop_id: int = Field(foreign_key="itinerarystop.id")
     
     title: str
-    category: ActivityCategory
-    cost: Optional[float] = 0.0
+    description: Optional[str] = None
     activity_date: Optional[date] = None
     start_time: Optional[time] = None
     is_completed: bool = False
+    
+    # Budget Fields
+    category: ExpenseCategory = ExpenseCategory.OTHER
+    cost: float = 0.0
     
     # Relationships
     stop: ItineraryStop = Relationship(back_populates="activities")
