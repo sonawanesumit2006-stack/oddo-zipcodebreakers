@@ -19,7 +19,7 @@ const StatsOverview = ({ stats }) => {
     },
     {
       label: 'Total Budget',
-      value: `$${stats?.totalBudget?.toLocaleString()}`,
+      value: `₹${stats?.totalBudget?.toLocaleString('en-IN')}`,
       icon: 'Wallet',
       color: 'text-warning',
       bgColor: 'bg-warning/10'
