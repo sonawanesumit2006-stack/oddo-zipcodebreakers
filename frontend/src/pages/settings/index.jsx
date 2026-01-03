@@ -69,76 +69,93 @@ export default function Settings() {
                 <Icon name="Settings" size={28} className="text-white" />
               </div>
               <div>
-                <h1 className="text-3xl md:text-4xl font-bold text-foreground">Settings</h1>
-                <p className="text-sm text-muted-foreground mt-1">Manage your account preferences and application settings.</p>
+                <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">Settings</h1>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Manage your account preferences and application settings.</p>
               </div>
             </div>
 
             <div className="bg-card p-8 rounded-2xl shadow-sm border border-border/50 hover:shadow-md transition-all duration-300">
-              <h2 className="text-lg font-bold mb-6 text-foreground flex items-center gap-2">
+              <h2 className="text-lg font-bold mb-6 text-gray-900 dark:text-white flex items-center gap-2">
                 <Icon name="User" size={20} /> Account Details
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="animate-fade-in" style={{ animationDelay: '100ms' }}>
-                  <label className="block text-sm font-semibold mb-2 text-muted-foreground uppercase tracking-wide">Display name</label>
+                  <label
+                    className="block text-sm font-semibold mb-2 uppercase tracking-wide"
+                    style={{ color: settings.theme === 'dark' ? '#d1d5db' : '#4b5563' }}
+                  >
+                    Display name
+                  </label>
                   <input
-                    className="w-full px-4 py-3 rounded-lg border border-border focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-all text-foreground placeholder:text-muted-foreground bg-background/50 hover:border-border/80"
+                    className="w-full px-4 py-3 rounded-lg border border-border focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-all text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 bg-white dark:bg-gray-800 hover:border-border/80"
                     value={user.name}
-                    readOnly
-                  // Editable logic would require backend update
+                    onChange={(e) => update({ name: e.target.value })}
                   />
                 </div>
 
                 <div className="animate-fade-in" style={{ animationDelay: '150ms' }}>
-                  <label className="block text-sm font-semibold mb-2 text-muted-foreground uppercase tracking-wide">Email</label>
+                  <label
+                    className="block text-sm font-semibold mb-2 uppercase tracking-wide"
+                    style={{ color: settings.theme === 'dark' ? '#d1d5db' : '#4b5563' }}
+                  >
+                    Email
+                  </label>
                   <input
-                    className="w-full px-4 py-3 rounded-lg border border-border focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-all text-foreground placeholder:text-muted-foreground bg-background/50 hover:border-border/80"
+                    className="w-full px-4 py-3 rounded-lg border border-border focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-all text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 bg-white dark:bg-gray-800 hover:border-border/80"
                     value={user.email}
-                    readOnly
+                    onChange={(e) => update({ email: e.target.value })}
                   />
                 </div>
               </div>
 
               <div className="mt-8 pt-8 border-t border-border">
-                <h3 className="text-lg font-bold mb-6 text-foreground flex items-center gap-2">
+                <h3 className="text-lg font-bold mb-6 text-gray-900 dark:text-white flex items-center gap-2">
                   <Icon name="Palette" size={20} /> Preferences
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="animate-fade-in" style={{ animationDelay: '200ms' }}>
-                    <label className="block text-sm font-semibold mb-3 text-muted-foreground uppercase tracking-wide">Theme</label>
+                    <label
+                      className="block text-sm font-semibold mb-3 uppercase tracking-wide"
+                      style={{ color: settings.theme === 'dark' ? '#d1d5db' : '#4b5563' }}
+                    >
+                      Theme
+                    </label>
                     <div className="flex items-center gap-3">
-                      <select
-                        className="px-4 py-3 rounded-lg border border-border focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-all text-foreground bg-background/50 hover:border-border/80"
-                        value={preferences.theme}
-                        onChange={(e) => updatePreferences({ theme: e.target.value })}
+                      <button
+                        className={`inline-flex items-center gap-2 px-4 py-3 rounded-lg border transition-all ${settings.theme === 'light'
+                            ? 'border-primary bg-primary text-white'
+                            : 'border-border bg-transparent text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                          }`}
+                        onClick={() => update({ theme: 'light' })}
+                        aria-label="Light mode"
+                        title="Light mode"
                       >
-                        <option value="light">Light</option>
-                        <option value="dark">Dark</option>
-                      </select>
+                        <Icon name="Sun" size={18} color={settings.theme === 'light' ? '#ffffff' : undefined} />
+                        <span className="text-sm font-medium">Light</span>
+                      </button>
 
                       <button
-                        className="inline-flex items-center gap-2 px-4 py-3 rounded-lg border border-border bg-transparent hover:bg-muted/20 transition-all"
-                        onClick={() => updatePreferences({ theme: preferences.theme === 'dark' ? 'light' : 'dark' })}
-                        aria-label="Toggle theme"
-                        title="Toggle theme"
+                        className={`inline-flex items-center gap-2 px-4 py-3 rounded-lg border transition-all ${settings.theme === 'dark'
+                            ? 'border-primary bg-primary text-white'
+                            : 'border-border bg-transparent text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                          }`}
+                        onClick={() => update({ theme: 'dark' })}
+                        aria-label="Dark mode"
+                        title="Dark mode"
                       >
-                        {preferences.theme === 'dark' ? (
-                          <>
-                            <Icon name="Sun" size={18} />
-                            <span className="text-sm text-foreground">Light</span>
-                          </>
-                        ) : (
-                          <>
-                            <Icon name="Moon" size={18} />
-                            <span className="text-sm text-foreground">Dark</span>
-                          </>
-                        )}
+                        <Icon name="Moon" size={18} color={settings.theme === 'dark' ? '#ffffff' : undefined} />
+                        <span className="text-sm font-medium">Dark</span>
                       </button>
                     </div>
                   </div>
 
                   <div className="animate-fade-in" style={{ animationDelay: '250ms' }}>
-                    <label className="block text-sm font-semibold mb-3 text-muted-foreground uppercase tracking-wide">Notifications</label>
+                    <label
+                      className="block text-sm font-semibold mb-3 uppercase tracking-wide"
+                      style={{ color: settings.theme === 'dark' ? '#d1d5db' : '#4b5563' }}
+                    >
+                      Notifications
+                    </label>
                     <div className="flex items-center gap-3">
                       <input
                         id="notif"

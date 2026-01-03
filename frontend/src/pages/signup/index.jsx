@@ -16,31 +16,33 @@ const Signup = () => {
 
     return (
         <div className="min-h-screen w-full relative flex items-center justify-center p-4">
-            {/* Page Background (Blurred & Dimmed) */}
+            {/* Blurred Background Image */}
             <div className="absolute inset-0 z-0">
                 <img
                     src="https://images.unsplash.com/photo-1540206351-d6465b3ac5c1?q=80&w=2832&auto=format&fit=crop"
                     alt="Background"
-                    className="w-full h-full object-cover blur-md brightness-50"
+                    className="w-full h-full object-cover"
+                    style={{ filter: 'blur(8px)' }}
                 />
+                <div className="absolute inset-0 bg-black/30"></div>
             </div>
 
             {/* Main Centered Card Container */}
-            <div className="relative z-10 w-full max-w-5xl bg-transparent rounded-2xl shadow-2xl overflow-hidden flex flex-col lg:flex-row min-h-[600px] lg:h-[700px]">
+            <div className="relative z-10 w-full max-w-5xl bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col lg:flex-row min-h-[600px] lg:h-[700px]">
 
-                {/* Left Side - Signup Form (Glassmorphism) */}
-                <div className="w-full lg:w-1/2 p-8 md:p-12 lg:p-16 flex flex-col justify-center bg-card/80 dark:bg-card/70 backdrop-blur-xl border-r border-border">
+                {/* Left Side - Signup Form (Solid White) */}
+                <div className="w-full lg:w-1/2 p-8 md:p-12 lg:p-16 flex flex-col justify-center bg-white">
                     {/* Logo */}
                     <div className="flex items-center gap-2 mb-8">
                         <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shadow-md">
                             <Icon name="Plane" className="text-white w-5 h-5" />
                         </div>
-                        <span className="text-xl font-bold text-foreground tracking-tight">Travel Planner</span>
+                        <span className="text-xl font-bold text-gray-900 tracking-tight">Travel Planner</span>
                     </div>
 
                     <div className="mb-6">
-                        <h1 className="text-3xl font-bold text-foreground mb-2">Create an account</h1>
-                        <p className="text-muted-foreground">Start your journey with us today.</p>
+                        <h1 className="text-3xl font-bold text-gray-900 mb-2">Create an account</h1>
+                        <p className="text-gray-600">Start your journey with us today.</p>
                     </div>
 
                     {/* Google Button */}
@@ -60,10 +62,10 @@ const Signup = () => {
                     {/* Divider */}
                     <div className="relative mb-6">
                         <div className="absolute inset-0 flex items-center">
-                            <div className="w-full border-t border-border"></div>
+                            <div className="w-full border-t border-gray-300"></div>
                         </div>
-                        <div className="relative flex justify-center text-xs uppercase text-muted-foreground font-medium">
-                            <span className="px-2">Or continue with</span>
+                        <div className="relative flex justify-center text-xs uppercase text-gray-500 font-medium">
+                            <span className="px-2 bg-white">Or continue with</span>
                         </div>
                     </div>
 
@@ -71,13 +73,13 @@ const Signup = () => {
 
                     {/* Footer */}
                     <div className="mt-8 text-center">
-                        <p className="text-muted-foreground text-sm">
+                        <p className="text-gray-600 text-sm">
                             Already have an account?{' '}
-                            <button onClick={() => navigate('/login')} className="text-primary font-semibold hover:underline">
+                            <button onClick={() => navigate('/login')} className="text-blue-600 font-semibold hover:underline">
                                 Log in
                             </button>
                         </p>
-                    </div> 
+                    </div>
                 </div>
 
                 {/* Right Side - Image (Original Clarity) */}
