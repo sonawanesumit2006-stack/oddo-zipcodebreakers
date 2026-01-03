@@ -14,6 +14,9 @@ const TripDetail = () => {
   const navigate = useNavigate();
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [activeView, setActiveView] = useState('day');
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const contentRef = useRef(null);
+  const [isExporting, setIsExporting] = useState(false);
 
   const tripData = {
     id: 1,
