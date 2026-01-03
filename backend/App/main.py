@@ -19,6 +19,9 @@ app.add_middleware(SessionMiddleware, secret_key=settings.secret_key)
 origins = [
     "http://localhost:5173", # <--- NEW: Vite TypeScript usually runs here
     "http://127.0.0.1:5173",
+    "http://localhost:4028", # User's specific port
+    "http://127.0.0.1:4028",
+    "http://172.18.15.10:4028",
 ]
 app.add_middleware(
     CORSMiddleware,

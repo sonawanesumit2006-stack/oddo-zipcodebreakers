@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from '../../../components/AppIcon';
+import api from '../../../api/axios';
 
 const SignupForm = () => {
     const navigate = useNavigate();
@@ -12,6 +13,7 @@ const SignupForm = () => {
         agreeToTerms: false
     });
     const [showPassword, setShowPassword] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -21,14 +23,46 @@ const SignupForm = () => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSignup = async (e) => {
         e.preventDefault();
-        // Simulate signup logic
-        navigate('/login');
+
+        if (formData.password !== formData.confirmPassword) {
+            alert("Passwords do not match!");
+            return;
+        }
+
+        setIsLoading(true);
+
+        try {
+            // Backend expects Form Data
+            const data = new FormData();
+            data.append('name', formData.name);
+            data.append('email', formData.email);
+            data.append('username', formData.email); // Use email as username
+            data.append('password', formData.password);
+
+            // Optional fields
+            data.append('bio', '');
+            data.append('home_city', '');
+            data.append('avatar_file', new File([""], "empty.txt", { type: "text/plain" })); // Mimic empty file upload
+
+            await api.post('/register', data);
+
+            alert('Account created successfully! Please login.');
+            navigate('/login');
+
+        } catch (error) {
+            console.error("Signup Error:", error);
+            const detail = error.response?.data?.detail;
+            const errorMsg = typeof detail === 'object' ? JSON.stringify(detail) : detail;
+            alert(errorMsg || "Registration failed. Please try again.");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
-        <form onSubmit={handleSubmit} className="w-full space-y-5">
+        <form onSubmit={handleSignup} className="w-full space-y-5">
             {/* Name Field */}
             <div className="space-y-1.5">
                 <label className="text-sm font-medium text-gray-700">Full Name</label>
@@ -93,6 +127,25 @@ const SignupForm = () => {
                 </div>
             </div>
 
+            {/* Confirm Password Field (Added for Validaton) */}
+            <div className="space-y-1.5">
+                <label className="text-sm font-medium text-gray-700">Confirm Password</label>
+                <div className="relative">
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                        <Icon name="Lock" size={18} />
+                    </div>
+                    <input
+                        type={showPassword ? 'text' : 'password'}
+                        name="confirmPassword"
+                        placeholder="Confirm your password"
+                        value={formData.confirmPassword}
+                        onChange={handleInputChange}
+                        className="w-full pl-10 pr-10 py-2.5 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all placeholder:text-gray-400 text-gray-900"
+                        required
+                    />
+                </div>
+            </div>
+
             {/* Terms & Conditions */}
             <div className="flex items-start gap-2 pt-1">
                 <div className="flex h-5 items-center">
@@ -116,9 +169,10 @@ const SignupForm = () => {
             {/* Submit Button */}
             <button
                 type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg transition-colors shadow-sm shadow-blue-200 mt-2"
+                disabled={isLoading}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg transition-colors shadow-sm shadow-blue-200 mt-2 disabled:opacity-50"
             >
-                Create Account
+                {isLoading ? "Creating Account..." : "Create Account"}
             </button>
         </form>
     );

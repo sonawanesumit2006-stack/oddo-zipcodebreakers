@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Icon from '../AppIcon';
 
@@ -48,6 +48,20 @@ const SidebarNavigation = ({ isCollapsed = false }) => {
     }
   };
 
+  /* Load User Data */
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (e) {
+        console.error("Failed to parse user data", e);
+      }
+    }
+  }, []);
+
   return (
     <>
       <button
@@ -65,9 +79,8 @@ const SidebarNavigation = ({ isCollapsed = false }) => {
         />
       )}
       <aside
-        className={`fixed lg:fixed top-0 left-0 h-full bg-card border-r border-border z-100 transition-smooth ${
-          isCollapsed ? 'w-20' : 'w-60'
-        } ${isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
+        className={`fixed lg:fixed top-0 left-0 h-full bg-card border-r border-border z-100 transition-smooth ${isCollapsed ? 'w-20' : 'w-60'
+          } ${isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
       >
         <div className={`sidebar-header ${isCollapsed ? 'sidebar-collapsed' : ''}`}>
           <div className="sidebar-logo">
@@ -82,11 +95,10 @@ const SidebarNavigation = ({ isCollapsed = false }) => {
               key={item?.path}
               to={item?.path}
               onClick={handleNavItemClick}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-smooth ${
-                isActive(item?.path)
-                  ? 'bg-primary text-primary-foreground shadow-elevation-1'
-                  : 'text-foreground hover:bg-muted hover:shadow-elevation-1'
-              } ${isCollapsed ? 'justify-center' : ''}`}
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-smooth ${isActive(item?.path)
+                ? 'bg-primary text-primary-foreground shadow-elevation-1'
+                : 'text-foreground hover:bg-muted hover:shadow-elevation-1'
+                } ${isCollapsed ? 'justify-center' : ''}`}
             >
               <Icon
                 name={item?.icon}
@@ -100,13 +112,21 @@ const SidebarNavigation = ({ isCollapsed = false }) => {
 
         <div className="absolute bottom-6 left-0 right-0 px-6">
           <div className={`flex items-center gap-3 px-4 py-3 bg-muted rounded-lg ${isCollapsed ? 'justify-center' : ''}`}>
-            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-              <Icon name="User" size={16} color="var(--color-primary-foreground)" />
+            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center overflow-hidden shrink-0">
+              {user?.avatar_url ? (
+                <img
+                  src={user.avatar_url.startsWith('http') ? user.avatar_url : `http://localhost:8000${user.avatar_url}`}
+                  alt={user.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <Icon name="User" size={16} color="var(--color-primary-foreground)" />
+              )}
             </div>
             {!isCollapsed && (
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-foreground truncate">Travel Explorer</p>
-                <p className="text-xs text-muted-foreground truncate">explorer@globetrotter.com</p>
+                <p className="text-sm font-medium text-foreground truncate">{user?.name || 'Guest'}</p>
+                <p className="text-xs text-muted-foreground truncate">{user?.email || 'Please login'}</p>
               </div>
             )}
           </div>

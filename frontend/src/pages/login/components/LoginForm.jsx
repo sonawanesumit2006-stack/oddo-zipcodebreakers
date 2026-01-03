@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from '../../../components/AppIcon';
+import api from '../../../api/axios';
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -10,14 +11,48 @@ const LoginForm = () => {
     rememberMe: false
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      // FastAPI OAuth2PasswordRequestForm expects form-data, not JSON
+      const params = new URLSearchParams();
+      params.append('username', formData.email); // OAuth2 'username' field maps to email
+      params.append('password', formData.password);
+
+      const response = await api.post('/login', params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+
+      // Save data
+      const { access_token, user } = response.data;
+      localStorage.setItem('access_token', access_token);
+      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('isAuthenticated', 'true');
+
+      // Redirect
+      navigate('/dashboard');
+
+    } catch (error) {
+      console.error("Login Error:", error);
+      alert(error.response?.data?.detail || "Login failed. Please check your credentials.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <form onSubmit={(e) => e.preventDefault()} className="w-full space-y-6">
+    <form onSubmit={handleLogin} className="w-full space-y-6">
       {/* Email Field */}
       <div className="space-y-2">
         <label className="text-sm font-medium text-gray-700">Email address</label>
@@ -31,6 +66,7 @@ const LoginForm = () => {
             placeholder="you@example.com"
             value={formData.email}
             onChange={handleInputChange}
+            required
             className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all placeholder:text-gray-400 text-gray-900"
           />
         </div>
@@ -49,6 +85,7 @@ const LoginForm = () => {
             placeholder="••••••••"
             value={formData.password}
             onChange={handleInputChange}
+            required
             className="w-full pl-10 pr-10 py-2.5 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all placeholder:text-gray-400 text-gray-900"
           />
           <button
@@ -84,10 +121,10 @@ const LoginForm = () => {
       {/* Submit Button */}
       <button
         type="submit"
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg transition-colors shadow-sm shadow-blue-200"
-        onClick={() => navigate('/dashboard')}
+        disabled={isLoading}
+        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg transition-colors shadow-sm shadow-blue-200 disabled:opacity-50"
       >
-        Sign in
+        {isLoading ? "Signing in..." : "Sign in"}
       </button>
     </form>
   );

@@ -12,6 +12,7 @@ import Dashboard from './pages/dashboard';
 import MyTrips from './pages/my-trips';
 import TripDetail from './pages/trip-detail';
 import JoinTrip from './pages/join-trip';
+import GoogleCallback from './pages/google-callback';
 
 const Routes = () => {
   return (
@@ -23,6 +24,7 @@ const Routes = () => {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/google-callback" element={<GoogleCallback />} />
           <Route path="/budget-management" element={<BudgetManagement />} />
           <Route path="/activity-management" element={<ActivityManagement />} />
           <Route path="/dashboard" element={<Dashboard />} />
