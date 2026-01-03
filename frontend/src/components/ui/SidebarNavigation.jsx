@@ -65,9 +65,8 @@ const SidebarNavigation = ({ isCollapsed = false }) => {
         />
       )}
       <aside
-        className={`fixed lg:fixed top-0 left-0 h-full bg-card border-r border-border/50 z-100 transition-smooth overflow-y-auto ${
-          isCollapsed ? 'w-20' : 'w-64'
-        } ${isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
+        className={`fixed lg:fixed top-0 left-0 h-full bg-card border-r border-border/50 z-100 transition-smooth overflow-y-auto ${isCollapsed ? 'w-20' : 'w-64'
+          } ${isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
       >
         {/* Logo Section */}
         <div className="flex items-center gap-3 px-6 py-6 border-b border-border/30">
@@ -86,11 +85,10 @@ const SidebarNavigation = ({ isCollapsed = false }) => {
               key={item?.path}
               to={item?.path}
               onClick={handleNavItemClick}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
-                isActive(item?.path)
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${isActive(item?.path)
                   ? 'bg-primary text-primary-foreground shadow-lg scale-105'
                   : 'text-foreground hover:bg-muted/60 hover:shadow-md'
-              } ${isCollapsed ? 'justify-center' : 'animate-fade-in'}`}
+                } ${isCollapsed ? 'justify-center' : 'animate-fade-in'}`}
               style={!isCollapsed ? { animationDelay: `${idx * 50}ms` } : {}}
             >
               <Icon
@@ -104,7 +102,7 @@ const SidebarNavigation = ({ isCollapsed = false }) => {
         </nav>
 
         {/* User Profile Button */}
-        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-50">
+        <div className={`absolute bottom-6 z-50 ${isCollapsed ? 'left-4' : 'left-6'}`}>
           <Link
             to="/settings"
             onClick={handleNavItemClick}
@@ -112,7 +110,7 @@ const SidebarNavigation = ({ isCollapsed = false }) => {
             className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all duration-200"
             aria-label="Account Settings"
           >
-            <Icon name="User" size={20} color="var(--color-primary-foreground)" />
+            <Icon name="User" size={20} color="#FFFFFF" />
             <span className="sr-only">Account Settings</span>
           </Link>
         </div>
