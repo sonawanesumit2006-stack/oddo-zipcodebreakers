@@ -65,43 +65,55 @@ const SidebarNavigation = ({ isCollapsed = false }) => {
         />
       )}
       <aside
-        className={`fixed lg:fixed top-0 left-0 h-full bg-card border-r border-border z-100 transition-smooth ${
-          isCollapsed ? 'w-20' : 'w-60'
+        className={`fixed lg:fixed top-0 left-0 h-full bg-card border-r border-border/50 z-100 transition-smooth overflow-y-auto ${
+          isCollapsed ? 'w-20' : 'w-64'
         } ${isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
       >
-        <div className={`sidebar-header ${isCollapsed ? 'sidebar-collapsed' : ''}`}>
-          <div className="sidebar-logo">
+        {/* Logo Section */}
+        <div className="flex items-center gap-3 px-6 py-6 border-b border-border/30">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg">
             <Icon name="Plane" size={24} color="#FFFFFF" />
           </div>
-          <span className="sidebar-logo-text">GlobeTrotter</span>
+          {!isCollapsed && (
+            <span className="font-bold text-lg bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">GlobeTrotter</span>
+          )}
         </div>
 
-        <nav className="flex flex-col gap-2 p-6">
-          {navigationItems?.map((item) => (
+        {/* Navigation */}
+        <nav className="flex flex-col gap-1 p-4">
+          {navigationItems?.map((item, idx) => (
             <Link
               key={item?.path}
               to={item?.path}
               onClick={handleNavItemClick}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-smooth ${
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
                 isActive(item?.path)
-                  ? 'bg-primary text-primary-foreground shadow-elevation-1'
-                  : 'text-foreground hover:bg-muted hover:shadow-elevation-1'
-              } ${isCollapsed ? 'justify-center' : ''}`}
+                  ? 'bg-primary text-primary-foreground shadow-lg scale-105'
+                  : 'text-foreground hover:bg-muted/60 hover:shadow-md'
+              } ${isCollapsed ? 'justify-center' : 'animate-fade-in'}`}
+              style={!isCollapsed ? { animationDelay: `${idx * 50}ms` } : {}}
             >
               <Icon
                 name={item?.icon}
                 size={20}
                 color={isActive(item?.path) ? 'var(--color-primary-foreground)' : 'var(--color-foreground)'}
               />
-              {!isCollapsed && <span className="font-medium">{item?.label}</span>}
+              {!isCollapsed && <span className="font-semibold text-sm">{item?.label}</span>}
             </Link>
           ))}
         </nav>
 
-        <div className="fixed bottom-6 left-4 z-50">
-          <Link to="/settings" onClick={handleNavItemClick} title="Account" className="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-elevation-2 hover:shadow-elevation-3 focus:outline-none focus:ring-2 focus:ring-primary/40" aria-label="Account">
-            <Icon name="User" size={18} color="var(--color-primary-foreground)" />
-            <span className="sr-only">Account</span>
+        {/* User Profile Button */}
+        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-50">
+          <Link
+            to="/settings"
+            onClick={handleNavItemClick}
+            title="Account Settings"
+            className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all duration-200"
+            aria-label="Account Settings"
+          >
+            <Icon name="User" size={20} color="var(--color-primary-foreground)" />
+            <span className="sr-only">Account Settings</span>
           </Link>
         </div>
       </aside>

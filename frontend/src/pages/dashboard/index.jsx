@@ -116,39 +116,29 @@ const Dashboard = () => {
 
         <main className={`transition-smooth ${isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-60'}`}>
           <div className="px-4 md:px-6 lg:px-8 py-8 md:py-12 max-w-[1600px] mx-auto">
-            {/* Quick Stats Bar */}
-            <div className="grid grid-cols-3 md:grid-cols-4 gap-4 mb-8 animate-fade-in">
-              <div className="bg-card border border-border/50 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-300">
-                <div className="text-xs text-muted-foreground font-semibold uppercase mb-1">Active Trips</div>
-                <div className="text-2xl font-bold text-primary">{mockTrips.filter(t => t.status === 'active').length}</div>
-              </div>
-              <div className="bg-card border border-border/50 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-300">
-                <div className="text-xs text-muted-foreground font-semibold uppercase mb-1">Planned</div>
-                <div className="text-2xl font-bold text-accent">{mockTrips.filter(t => t.status === 'planned').length}</div>
-              </div>
-              <div className="bg-card border border-border/50 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-300">
-                <div className="text-xs text-muted-foreground font-semibold uppercase mb-1">Completed</div>
-                <div className="text-2xl font-bold text-success">{mockTrips.filter(t => t.status === 'completed').length}</div>
-              </div>
-              <div className="bg-gradient-to-br from-primary/10 to-secondary/10 border border-border rounded-2xl p-4 shadow-sm hidden md:block">
-                <div className="text-xs text-muted-foreground font-semibold uppercase mb-1">Total Budget</div>
-                <div className="text-2xl font-bold text-foreground">₹{budgetData.totalBudget.toLocaleString()}</div>
-              </div>
-            </div>
-
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Main Content Area */}
               <div className="lg:col-span-2 space-y-8">
 
                 {/* Hero Section with Map Toggle */}
-                <div className="relative bg-gradient-to-br from-primary via-primary/80 to-secondary rounded-3xl overflow-hidden h-[360px] shadow-2xl border border-border/20 transition-all duration-300 hover:shadow-3xl animate-fade-in">
+                <div className="relative bg-gradient-to-br from-primary via-primary/80 to-secondary rounded-3xl overflow-hidden h-[380px] shadow-2xl border border-border/20 transition-all duration-300 hover:shadow-3xl animate-fade-in">
+                  {/* Background Image - Fully Visible */}
+                  <div className="absolute inset-0">
+                    <img
+                      src="https://images.unsplash.com/photo-1699958110629-608c883131b8"
+                      alt="Mountain landscape"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/40"></div>
+                  </div>
+
                   {/* Map/Hero Toggle */}
                   <div className="absolute top-4 right-4 z-20 bg-card/80 backdrop-blur-md rounded-lg p-1 flex border border-border shadow-lg">
                     <button
                       onClick={() => setShowMap(false)}
                       className={`px-4 py-2 rounded-md text-sm font-semibold transition-all ${!showMap ? 'bg-primary text-white shadow-lg' : 'text-muted-foreground hover:text-foreground'}`}
                     >
-                      Hero
+                      Home
                     </button>
                     <button
                       onClick={() => setShowMap(true)}
@@ -167,43 +157,34 @@ const Dashboard = () => {
                       </div>
                     </div>
                   ) : (
-                    <>
-                      <div className="absolute inset-0 opacity-30 blur-3xl">
-                        <img
-                          src="https://images.unsplash.com/photo-1699958110629-608c883131b8"
-                          alt="Mountain landscape"
-                          className="w-full h-full object-cover"
-                        />
+                    <div className="relative z-10 p-8 md:p-12 h-full flex flex-col justify-center">
+                      <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 leading-tight">
+                        Explore the
+                        <br />
+                        <span className="bg-gradient-to-r from-white via-blue-200 to-white bg-clip-text text-transparent">World</span>
+                      </h1>
+                      <p className="text-white/90 text-lg md:text-xl mb-8 max-w-2xl leading-relaxed">
+                        Plan, track, and share your most memorable adventures across the globe.
+                      </p>
+                      <div className="flex flex-wrap gap-4">
+                        <Button
+                          variant="default"
+                          size="lg"
+                          iconName="Plus"
+                          iconPosition="left"
+                          onClick={() => navigate('/plan-trip')}
+                          className="bg-white text-primary hover:bg-white/90 shadow-lg">
+                          Plan New Trip
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="lg"
+                          onClick={() => navigate('/my-trips')}
+                          className="text-white border-white/40 hover:bg-white/10 hover:text-white shadow-lg">
+                          View Trips
+                        </Button>
                       </div>
-                      <div className="relative z-10 p-8 md:p-12 h-full flex flex-col justify-center">
-                        <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-3 leading-tight">
-                          Good Morning, Alex.
-                          <br />
-                          <span className="text-white/90">Ready for your next adventure?</span>
-                        </h1>
-                        <p className="text-white/80 text-base md:text-lg mb-8 max-w-xl">
-                          Start planning your dream itinerary today, or pick up exactly where you left off.
-                        </p>
-                        <div className="flex flex-wrap gap-3">
-                          <Button
-                            variant="default"
-                            size="lg"
-                            iconName="Plus"
-                            iconPosition="left"
-                            onClick={() => navigate('/plan-trip')}
-                            className="bg-white text-primary hover:bg-white/90 shadow-lg">
-                            Plan New Trip
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="lg"
-                            onClick={() => navigate('/my-trips')}
-                            className="text-white border-white/30 hover:bg-white/10 hover:text-white">
-                            Resume Planning
-                          </Button>
-                        </div>
-                      </div>
-                    </>
+                    </div>
                   )}
                 </div>
 
