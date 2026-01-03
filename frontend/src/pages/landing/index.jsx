@@ -6,7 +6,7 @@ const LandingPage = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="min-h-screen bg-white font-sans text-gray-900">
+        <div className="min-h-screen bg-background font-sans text-foreground">
             {/* Navigation */}
             <nav className="absolute top-0 left-0 right-0 z-50 py-6">
                 <div className="container mx-auto px-6 flex items-center justify-between">
@@ -113,21 +113,21 @@ const LandingPage = () => {
             </section>
 
             {/* Features Section */}
-            <section className="py-24 bg-gray-50/50" id="features">
+            <section className="py-24 bg-muted/50" id="features">
                 <div className="container mx-auto px-6">
                     <div className="text-center max-w-2xl mx-auto mb-16">
                         <span className="text-blue-600 text-sm font-bold uppercase tracking-wider mb-2 block">Why GlobeTrotter?</span>
-                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                        <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
                             Everything you need for the <span className="text-blue-600">perfect trip</span>
                         </h2>
-                        <p className="text-gray-600">
+                        <p className="text-muted-foreground">
                             Smart automation meets beautiful design. We handle the logistics so you can focus on the memories.
                         </p>
                     </div>
 
                     <div className="grid md:grid-cols-3 gap-8">
                         {/* Feature 1 */}
-                        <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all group">
+                        <div className="bg-card p-8 rounded-2xl border border-border shadow-sm hover:shadow-lg transition-all group">
                             <div className="w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                                 <Icon name="GitBranch" className="text-blue-600 w-7 h-7" />
                             </div>
@@ -180,7 +180,7 @@ const LandingPage = () => {
 
                             <ul className="space-y-4 mb-8">
                                 {['Automatic timezone adjustments', 'Offline access to all your plans', 'One-click PDF export'].map((item, i) => (
-                                    <li key={i} className="flex items-center gap-3 text-gray-700">
+                                    <li key={i} className="flex items-center gap-3 text-muted-foreground">
                                         <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
                                             <Icon name="Check" className="w-3 h-3 text-green-600" />
                                         </div>
@@ -201,7 +201,7 @@ const LandingPage = () => {
                                 <div className="flex items-center justify-between mb-8">
                                     <div>
                                         <h3 className="text-xl font-bold">Europe Summer 2024</h3>
-                                        <p className="text-sm text-gray-500">June 14 - June 24 • 2 Travelers</p>
+                                        <p className="text-sm text-muted-foreground">June 14 - June 24 • 2 Travelers</p>
                                     </div>
                                     <div className="flex -space-x-2">
                                         <div className="w-8 h-8 rounded-full bg-gray-200 border-2 border-white"></div>
@@ -234,7 +234,7 @@ const LandingPage = () => {
                                         </div>
                                         <div className="flex-1 bg-gray-50 rounded-xl p-4 hover:bg-orange-50/50 transition-colors">
                                             <div className="flex justify-between items-start mb-1">
-                                                <span className="font-semibold text-gray-900">Lunch at Le Train Bleu</span>
+                                                <span className="font-semibold text-foreground">Lunch at Le Train Bleu</span>
                                                 <span className="text-[10px] font-bold bg-gray-200 text-gray-600 px-2 py-0.5 rounded">RESERVED</span>
                                             </div>
                                             <p className="text-xs text-gray-500">12:30 PM • Gare de Lyon</p>

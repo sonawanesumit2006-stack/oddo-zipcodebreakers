@@ -10,7 +10,7 @@ import BudgetOverviewCard from './components/BudgetOverviewCard';
 import TrendingDestinationCard from './components/TrendingDestinationCard';
 import TripMapVisualization from './components/TripMapVisualization';
 import QuickToolsCard from './components/QuickToolsCard';
-import InviteFriendsCard from './components/InviteFriendsCard';
+import CommunityCard from './components/CommunityCard';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -66,21 +66,27 @@ const Dashboard = () => {
       name: "Jaipur, Rajasthan",
       description: "Pink city palaces, traditional handicrafts...",
       image: "https://images.unsplash.com/photo-1641231825326-6c2593710812",
-      imageAlt: "Amber Fort palace in Jaipur with golden sunset light illuminating sandstone walls and Mughal architecture"
+      imageAlt: "Amber Fort palace in Jaipur with golden sunset light illuminating sandstone walls and Mughal architecture",
+    highlights: ["Amber Fort", "City Palace", "Hawa Mahal", "Local bazaars"],
+    whyVisit: "Rich Rajasthani architecture, vibrant bazaars, historic forts and palaces, and excellent handicraft shopping."
     },
     {
       id: 2,
       name: "Goa Beaches",
       description: "Golden beaches, Portuguese heritage...",
       image: "https://img.rocket.new/generatedImages/rocket_gen_img_1ea0d9e38-1764660929642.png",
-      imageAlt: "Pristine Goa beach with golden sand, palm trees, and turquoise Arabian Sea waters at sunset"
+      imageAlt: "Pristine Goa beach with golden sand, palm trees, and turquoise Arabian Sea waters at sunset",
+    highlights: ["Baga Beach", "Colva Beach", "Watersports", "Beach shacks & nightlife"],
+    whyVisit: "Perfect for sun, sand, seafood, lively nightlife, and a relaxed coastal vibe."
     },
     {
       id: 3,
       name: "Manali, Himachal",
       description: "Snow-capped peaks, adventure sports...",
       image: "https://images.unsplash.com/photo-1579171634079-9bae0cc73d75",
-      imageAlt: "Snow-covered Himalayan mountains in Manali with pine forests and traditional wooden houses"
+      imageAlt: "Snow-covered Himalayan mountains in Manali with pine forests and traditional wooden houses",
+    highlights: ["Rohtang Pass", "Solang Valley", "Hadimba Temple", "Trekking & skiing"],
+    whyVisit: "Scenic Himalayan valleys offering adventure sports, cool climate, and beautiful mountain views."
     }];
 
 
@@ -105,84 +111,90 @@ const Dashboard = () => {
         <title>Dashboard - GlobeTrotter</title>
         <meta name="description" content="Manage your travel plans, track budgets, and explore new destinations with GlobeTrotter's comprehensive dashboard." />
       </Helmet>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-background">
         <SidebarNavigation isCollapsed={isSidebarCollapsed} />
 
         <main className={`transition-smooth ${isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-60'}`}>
-          <div className="px-4 md:px-6 lg:px-8 py-6 md:py-8 max-w-[1600px] mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="px-4 md:px-6 lg:px-8 py-8 md:py-12 max-w-[1600px] mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Main Content Area */}
-              <div className="lg:col-span-2 space-y-6">
+              <div className="lg:col-span-2 space-y-8">
 
-                {/* Visual Hero / Map Section */}
-                <div className="relative bg-gray-900 rounded-3xl overflow-hidden min-h-[400px] shadow-2xl border border-gray-800 transition-all duration-500">
-                  {/* Toggle Switch */}
-                  <div className="absolute top-4 right-4 z-20 bg-white/10 backdrop-blur-md rounded-lg p-1 flex border border-white/20">
-                    <button
-                      onClick={() => setShowMap(true)}
-                      className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${showMap ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-300 hover:text-white'}`}
-                    >
-                      Map View
-                    </button>
+                {/* Hero Section with Map Toggle */}
+                <div className="relative bg-gradient-to-br from-primary via-primary/80 to-secondary rounded-3xl overflow-hidden h-[380px] shadow-2xl border border-border/20 transition-all duration-300 hover:shadow-3xl animate-fade-in">
+                  {/* Background Image - Fully Visible */}
+                  <div className="absolute inset-0">
+                    <img
+                      src="https://images.unsplash.com/photo-1699958110629-608c883131b8"
+                      alt="Mountain landscape"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/40"></div>
+                  </div>
+
+                  {/* Map/Hero Toggle */}
+                  <div className="absolute top-4 right-4 z-20 bg-card/80 backdrop-blur-md rounded-lg p-1 flex border border-border shadow-lg">
                     <button
                       onClick={() => setShowMap(false)}
-                      className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${!showMap ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-300 hover:text-white'}`}
+                      className={`px-4 py-2 rounded-md text-sm font-semibold transition-all ${!showMap ? 'bg-primary text-white shadow-lg' : 'text-muted-foreground hover:text-foreground'}`}
                     >
-                      Cards
+                      Home
+                    </button>
+                    <button
+                      onClick={() => setShowMap(true)}
+                      className={`px-4 py-2 rounded-md text-sm font-semibold transition-all ${showMap ? 'bg-primary text-white shadow-lg' : 'text-muted-foreground hover:text-foreground'}`}
+                    >
+                      Map
                     </button>
                   </div>
 
                   {showMap ? (
-                    <div className="w-full h-full min-h-[400px]">
+                    <div className="w-full h-full">
                       <TripMapVisualization trips={mockTrips} />
-                      {/* Overlay Text for Map Mode */}
-                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900 to-transparent p-6 pointer-events-none">
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-6 pointer-events-none">
                         <h2 className="text-2xl font-bold text-white mb-1">Your Journey Map</h2>
-                        <p className="text-gray-400 text-sm">Visualizing {mockTrips.length} adventures across the globe.</p>
+                        <p className="text-gray-300 text-sm">Visualizing {mockTrips.length} adventures across India</p>
                       </div>
                     </div>
                   ) : (
-                    <>
-                      <div className="absolute inset-0 opacity-60">
-                        <img
-                          src="https://images.unsplash.com/photo-1699958110629-608c883131b8"
-                          alt="Landscape"
-                          className="w-full h-full object-cover"
-                        />
+                    <div className="relative z-10 p-8 md:p-12 h-full flex flex-col justify-center">
+                      <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 leading-tight">
+                        Explore the
+                        <br />
+                        <span className="bg-gradient-to-r from-white via-blue-200 to-white bg-clip-text text-transparent">World</span>
+                      </h1>
+                      <p className="text-white/90 text-lg md:text-xl mb-8 max-w-2xl leading-relaxed">
+                        Plan, track, and share your most memorable adventures across the globe.
+                      </p>
+                      <div className="flex flex-wrap gap-4">
+                        <Button
+                          variant="default"
+                          size="lg"
+                          iconName="Plus"
+                          iconPosition="left"
+                          onClick={() => navigate('/plan-trip')}
+                          className="bg-white text-primary hover:bg-white/90 shadow-lg">
+                          Plan New Trip
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="lg"
+                          onClick={() => navigate('/my-trips')}
+                          className="text-white border-white/40 hover:bg-white/10 hover:text-white shadow-lg">
+                          View Trips
+                        </Button>
                       </div>
-                      <div className="relative z-10 p-8 md:p-12 h-full flex flex-col justify-center bg-gradient-to-r from-gray-900/80 to-transparent">
-                        <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-4 leading-tight">
-                          Good Morning, Alex.<br />
-                          <span className="text-blue-400">Ready to explore?</span>
-                        </h1>
-                        <p className="text-gray-200 text-lg mb-8 max-w-xl">
-                          You have <span className="text-white font-bold">1 active trip</span> and <span className="text-white font-bold">2 planned</span>. Continue where you left off.
-                        </p>
-                        <div className="flex flex-wrap gap-3">
-                          <Button
-                            variant="default"
-                            size="lg"
-                            onClick={() => navigate('/plan-trip')}
-                            className="bg-blue-600 hover:bg-blue-700 border-none shadow-lg shadow-blue-900/20">
-                            Plan New Trip
-                          </Button>
-                          <Button
-                            variant="outline" // Changed since ghost on dark bg needs handling, utilizing outline with white styling via className
-                            size="lg"
-                            onClick={() => navigate('/my-trips')}
-                            className="text-white border-white/30 hover:bg-white/10">
-                            View All Trips
-                          </Button>
-                        </div>
-                      </div>
-                    </>
+                    </div>
                   )}
                 </div>
 
-                {/* Recent Adventures */}
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-2xl font-bold text-gray-900">Recent Adventures</h2>
+                {/* Recent Adventures Section */}
+                <div className="animate-fade-in">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h2 className="text-2xl md:text-3xl font-bold text-foreground">Your Trips</h2>
+                      <p className="text-sm text-muted-foreground mt-1">Active, planned, and completed adventures</p>
+                    </div>
                     <Button
                       variant="outline"
                       size="sm"
@@ -192,34 +204,49 @@ const Dashboard = () => {
                       <Icon name="ChevronRight" size={16} />
                     </Button>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {mockTrips?.map((trip) =>
-                      <TripCard key={trip?.id} trip={trip} />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {mockTrips?.slice(0, 4).map((trip, idx) =>
+                      <div key={trip?.id} style={{ animationDelay: `${idx * 50}ms` }} className="animate-fade-in">
+                        <TripCard trip={trip} />
+                      </div>
                     )}
                   </div>
                 </div>
 
                 {/* Trending Destinations */}
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">Trending Destinations for You</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {trendingDestinations?.map((destination) =>
-                      <TrendingDestinationCard key={destination?.id} destination={destination} />
+                <div className="animate-fade-in">
+                  <div className="mb-6">
+                    <h2 className="text-2xl md:text-3xl font-bold text-foreground">Trending Destinations for You</h2>
+                    <p className="text-sm text-muted-foreground mt-1">Discover popular travel spots and get inspired</p>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {trendingDestinations?.map((destination, idx) =>
+                      <div key={destination?.id} style={{ animationDelay: `${idx * 100}ms` }} className="animate-fade-in">
+                        <TrendingDestinationCard destination={destination} />
+                      </div>
                     )}
                   </div>
                 </div>
               </div>
 
               {/* Right Sidebar */}
-              <div className="space-y-6">
-                {/* Budget Overview */}
-                <BudgetOverviewCard budgetData={budgetData} />
+              <div className="space-y-8">
+                <div className="sticky top-24 space-y-8">
+                  {/* Budget Overview */}
+                  <div className="animate-fade-in" style={{ animationDelay: '200ms' }}>
+                    <BudgetOverviewCard budgetData={budgetData} />
+                  </div>
 
                 {/* Quick Tools */}
-                <QuickToolsCard onShowMap={() => setShowMap(true)} />
+                <div className="animate-fade-in" style={{ animationDelay: '300ms' }}>
+                  <QuickToolsCard />
+                </div>
 
-                {/* Invite Friends */}
-                <InviteFriendsCard />
+                  {/* Community */}
+                  <div className="animate-fade-in" style={{ animationDelay: '400ms' }}>
+                    <CommunityCard />
+                  </div>
+                </div>
               </div>
             </div>
           </div>

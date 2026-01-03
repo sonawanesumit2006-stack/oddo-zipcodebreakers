@@ -14,6 +14,13 @@ import TripDetail from './pages/trip-detail';
 import JoinTrip from './pages/join-trip';
 import GoogleCallback from './pages/google-callback';
 import PlanTrip from './pages/plan-trip';
+import CurrencyConverter from './pages/currency-converter';
+import PackList from './pages/pack-list';
+import Transport from './pages/transport';
+import Community from './pages/community';
+import EventsList from './pages/community/components/EventsList';
+import PostDetails from './pages/community/PostDetails';
+import Settings from './pages/settings';
 
 const Routes = () => {
   return (
@@ -33,10 +40,18 @@ const Routes = () => {
           <Route path="/trip-detail" element={<TripDetail />} />
           <Route path="/trip/share/:tripId" element={<JoinTrip />} />
           <Route path="/plan-trip" element={<PlanTrip />} />
+          <Route path="/currency-converter" element={<CurrencyConverter />} />
+          <Route path="/pack-list" element={<PackList />} />
+          <Route path="/transport" element={<Transport />} />
+          {/* Community and settings routes */}
+          <Route path="/community" element={<Community />} />
+          <Route path="/community/post/:id" element={<PostDetails />} />
+          <Route path="/community/events" element={<EventsList />} />
+          <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<NotFound />} />
-        </RouterRoutes>
-      </ErrorBoundary>
-    </BrowserRouter>
+        </RouterRoutes >
+      </ErrorBoundary >
+    </BrowserRouter >
   );
 };
 

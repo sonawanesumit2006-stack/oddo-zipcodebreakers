@@ -65,9 +65,9 @@ const SignupForm = () => {
         <form onSubmit={handleSignup} className="w-full space-y-5">
             {/* Name Field */}
             <div className="space-y-1.5">
-                <label className="text-sm font-medium text-gray-700">Full Name</label>
+                <label className="text-sm font-medium text-muted-foreground">Full Name</label>
                 <div className="relative">
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
                         <Icon name="User" size={18} />
                     </div>
                     <input
@@ -76,7 +76,7 @@ const SignupForm = () => {
                         placeholder="John Doe"
                         value={formData.name}
                         onChange={handleInputChange}
-                        className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all placeholder:text-gray-400 text-gray-900"
+                        className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all placeholder:text-muted-foreground text-foreground"
                         required
                     />
                 </div>
@@ -84,9 +84,9 @@ const SignupForm = () => {
 
             {/* Email Field */}
             <div className="space-y-1.5">
-                <label className="text-sm font-medium text-gray-700">Email address</label>
+                <label className="text-sm font-medium text-muted-foreground">Email address</label>
                 <div className="relative">
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
                         <Icon name="Mail" size={18} />
                     </div>
                     <input
@@ -95,7 +95,7 @@ const SignupForm = () => {
                         placeholder="you@example.com"
                         value={formData.email}
                         onChange={handleInputChange}
-                        className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all placeholder:text-gray-400 text-gray-900"
+                        className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all placeholder:text-muted-foreground text-foreground"
                         required
                     />
                 </div>
@@ -103,9 +103,9 @@ const SignupForm = () => {
 
             {/* Password Field */}
             <div className="space-y-1.5">
-                <label className="text-sm font-medium text-gray-700">Password</label>
+                <label className="text-sm font-medium text-muted-foreground">Password</label>
                 <div className="relative">
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
                         <Icon name="Lock" size={18} />
                     </div>
                     <input
@@ -114,13 +114,13 @@ const SignupForm = () => {
                         placeholder="Create a password"
                         value={formData.password}
                         onChange={handleInputChange}
-                        className="w-full pl-10 pr-10 py-2.5 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all placeholder:text-gray-400 text-gray-900"
+                        className="w-full pl-10 pr-10 py-2.5 rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all placeholder:text-muted-foreground text-foreground"
                         required
                     />
                     <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                     >
                         <Icon name={showPassword ? 'EyeOff' : 'Eye'} size={18} />
                     </button>
@@ -159,10 +159,10 @@ const SignupForm = () => {
                     />
                 </div>
                 <div className="text-sm">
-                    <span className="text-gray-600">I agree to the </span>
-                    <button type="button" className="font-semibold text-blue-600 hover:text-blue-700">Terms of Service</button>
-                    <span className="text-gray-600"> and </span>
-                    <button type="button" className="font-semibold text-blue-600 hover:text-blue-700">Privacy Policy</button>
+                    <span className="text-muted-foreground">I agree to the </span>
+                    <button type="button" className="font-semibold text-primary hover:text-primary/90">Terms of Service</button>
+                    <span className="text-muted-foreground"> and </span>
+                    <button type="button" className="font-semibold text-primary hover:text-primary/90">Privacy Policy</button>
                 </div>
             </div>
 

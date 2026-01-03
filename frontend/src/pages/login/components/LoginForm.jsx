@@ -55,9 +55,9 @@ const LoginForm = () => {
     <form onSubmit={handleLogin} className="w-full space-y-6">
       {/* Email Field */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-gray-700">Email address</label>
+        <label className="text-sm font-medium text-muted-foreground">Email address</label>
         <div className="relative">
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
             <Icon name="Mail" size={18} />
           </div>
           <input
@@ -66,17 +66,16 @@ const LoginForm = () => {
             placeholder="you@example.com"
             value={formData.email}
             onChange={handleInputChange}
-            required
-            className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all placeholder:text-gray-400 text-gray-900"
+            className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all placeholder:text-muted-foreground text-foreground"
           />
         </div>
       </div>
 
       {/* Password Field */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-gray-700">Password</label>
+        <label className="text-sm font-medium text-muted-foreground">Password</label>
         <div className="relative">
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
             <Icon name="Lock" size={18} />
           </div>
           <input
@@ -85,8 +84,7 @@ const LoginForm = () => {
             placeholder="••••••••"
             value={formData.password}
             onChange={handleInputChange}
-            required
-            className="w-full pl-10 pr-10 py-2.5 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all placeholder:text-gray-400 text-gray-900"
+            className="w-full pl-10 pr-10 py-2.5 rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all placeholder:text-muted-foreground text-foreground"
           />
           <button
             type="button"
@@ -105,14 +103,14 @@ const LoginForm = () => {
             type="checkbox"
             checked={formData.rememberMe}
             onChange={(e) => setFormData(prev => ({ ...prev, rememberMe: e.target.checked }))}
-            className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            className="w-4 h-4 rounded border-border text-primary focus:ring-primary/20"
           />
-          <span className="text-sm text-gray-600">Remember me</span>
+          <span className="text-sm text-muted-foreground">Remember me</span>
         </label>
         <button
           type="button"
           onClick={() => navigate('/forgot-password')}
-          className="text-sm font-semibold text-blue-600 hover:text-blue-700"
+          className="text-sm font-semibold text-primary hover:text-primary/90"
         >
           Forgot password?
         </button>
