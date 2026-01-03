@@ -11,6 +11,7 @@ import ActivityManagement from './pages/activity-management';
 import Dashboard from './pages/dashboard';
 import MyTrips from './pages/my-trips';
 import TripDetail from './pages/trip-detail';
+import JoinTrip from './pages/join-trip';
 
 const Routes = () => {
   return (
@@ -27,6 +28,7 @@ const Routes = () => {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/my-trips" element={<MyTrips />} />
           <Route path="/trip-detail" element={<TripDetail />} />
+          <Route path="/trip/share/:tripId" element={<JoinTrip />} />
           <Route path="*" element={<NotFound />} />
         </RouterRoutes>
       </ErrorBoundary>
