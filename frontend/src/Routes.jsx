@@ -12,6 +12,7 @@ import Dashboard from './pages/dashboard';
 import MyTrips from './pages/my-trips';
 import TripDetail from './pages/trip-detail';
 import JoinTrip from './pages/join-trip';
+import PlanTrip from './pages/plan-trip';
 
 const Routes = () => {
   return (
@@ -29,6 +30,7 @@ const Routes = () => {
           <Route path="/my-trips" element={<MyTrips />} />
           <Route path="/trip-detail" element={<TripDetail />} />
           <Route path="/trip/share/:tripId" element={<JoinTrip />} />
+          <Route path="/plan-trip" element={<PlanTrip />} />
           <Route path="*" element={<NotFound />} />
         </RouterRoutes>
       </ErrorBoundary>

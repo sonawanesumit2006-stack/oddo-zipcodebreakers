@@ -2,15 +2,25 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from '../../../components/AppIcon';
 
-const QuickToolsCard = () => {
+const QuickToolsCard = ({ onShowMap }) => {
   const navigate = useNavigate();
 
   const tools = [
-    { icon: 'Map', label: 'Map View', path: '/my-trips', color: '#8B5CF6' },
+    { icon: 'Map', label: 'Map View', action: 'map', color: '#8B5CF6' },
     { icon: 'List', label: 'Pack List', path: '/my-trips', color: '#10B981' },
     { icon: 'DollarSign', label: 'Converter', path: '/budget-management', color: '#F59E0B' },
     { icon: 'Plane', label: 'Flights', path: '/activity-management', color: '#EC4899' }
   ];
+
+  const handleToolClick = (tool) => {
+    if (tool.action === 'map' && onShowMap) {
+      onShowMap();
+      // Scroll to top to see the map if needed
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (tool.path) {
+      navigate(tool.path);
+    }
+  };
 
   return (
     <div className="bg-white rounded-2xl shadow-md p-6">
@@ -19,7 +29,7 @@ const QuickToolsCard = () => {
         {tools?.map((tool, index) => (
           <button
             key={index}
-            onClick={() => navigate(tool?.path)}
+            onClick={() => handleToolClick(tool)}
             className="flex flex-col items-center gap-2 p-4 rounded-xl hover:bg-gray-50 transition-colors group"
           >
             <div
