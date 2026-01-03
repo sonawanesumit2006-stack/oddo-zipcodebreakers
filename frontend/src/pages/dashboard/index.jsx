@@ -93,27 +93,26 @@ const Dashboard = () => {
               {/* Main Content Area */}
               <div className="lg:col-span-2 space-y-6">
                 {/* Hero Section */}
-                <div className="relative bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900 rounded-2xl overflow-hidden h-[400px] shadow-xl">
-                  <div className="absolute inset-0 opacity-30">
+                <div className="relative bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900 rounded-2xl overflow-hidden h-[360px] shadow-2xl">
+                  <div className="absolute inset-0 opacity-40 blur-sm">
                     <img
                       src="https://images.unsplash.com/photo-1699958110629-608c883131b8"
                       alt="Mountain landscape with forest silhouette at sunset"
                       className="w-full h-full object-cover" />
 
                   </div>
-                  <div className="relative z-10 p-8 md:p-12 h-full flex flex-col justify-center">
-                    <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+                  <div className="relative z-10 p-6 md:p-12 h-full flex flex-col justify-center">
+                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-3 leading-tight">
                       Good Morning, Alex.
                       <br />
                       Ready for your next
                       <br />
                       adventure?
                     </h1>
-                    <p className="text-gray-200 text-lg mb-8 max-w-xl">
-                      Start planning your dream itinerary today or pick up exactly
-                      where you left off on your summer plans.
+                    <p className="text-gray-200 text-base md:text-lg mb-6 max-w-xl">
+                      Start planning your dream itinerary today, or pick up exactly where you left off.
                     </p>
-                    <div className="flex flex-wrap gap-4">
+                    <div className="flex flex-wrap gap-3">
                       <Button
                         variant="default"
                         size="lg"
@@ -125,10 +124,10 @@ const Dashboard = () => {
                         Plan New Trip
                       </Button>
                       <Button
-                        variant="outline"
+                        variant="ghost"
                         size="lg"
                         onClick={() => navigate('/my-trips')}
-                        className="bg-transparent border-2 border-white text-white hover:bg-white/10">
+                        className="text-white border-white/30">
 
                         Resume Planning
                       </Button>
@@ -140,13 +139,14 @@ const Dashboard = () => {
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-2xl font-bold text-gray-900">Recent Adventures</h2>
-                    <button
+                    <Button
+                      variant="outline"
+                      size="sm"
                       onClick={() => navigate('/my-trips')}
-                      className="text-blue-500 hover:text-blue-600 font-medium text-sm flex items-center gap-1">
-
+                      className="h-9">
                       View All
                       <Icon name="ChevronRight" size={16} />
-                    </button>
+                    </Button>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {mockTrips?.map((trip) =>

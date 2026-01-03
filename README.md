@@ -189,6 +189,15 @@ const ProjectRoutes = () => {
 
 ### 🎨 Styling
 
+This project includes a client-side PDF export feature for trip and budget pages. For the best, paginated export results, install the optional frontend dependencies:
+
+```bash
+cd frontend
+npm install jspdf html2canvas
+```
+
+If these packages are not installed, the app will fall back to opening a printable window (use the browser's "Save as PDF" to save the content).
+
 This project uses Tailwind CSS for styling. The configuration includes:
 - Forms plugin for form styling
 - Typography plugin for text styling

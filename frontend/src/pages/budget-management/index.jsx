@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SidebarNavigation from '../../components/ui/SidebarNavigation';
 import Button from '../../components/ui/Button';
@@ -18,6 +18,8 @@ const BudgetManagement = () => {
   const [isLimitModalOpen, setIsLimitModalOpen] = useState(false);
   const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
   const [filterCategory, setFilterCategory] = useState('all');
+  const budgetRef = useRef(null);
+  const [isExporting, setIsExporting] = useState(false);
 
   const budgetSummary = {
     totalAllocated: 15000.00,
@@ -136,8 +138,55 @@ const BudgetManagement = () => {
     console.log('Expense saved:', expenseData);
   };
 
-  const handleExportReport = () => {
-    console.log('Exporting budget report...');
+  const handleExportReport = async () => {
+    if (!budgetRef?.current) return;
+    setIsExporting(true);
+    try {
+      const jspdfModule = await import('jspdf').catch(() => null);
+      const html2canvasModule = await import('html2canvas').catch(() => null);
+
+      if (jspdfModule && (jspdfModule.jsPDF || jspdfModule.default) && html2canvasModule) {
+        const jsPDF = jspdfModule.jsPDF || jspdfModule.default;
+        const html2canvas = html2canvasModule.default || html2canvasModule;
+        const element = budgetRef.current;
+        const canvas = await html2canvas(element, { scale: 2, useCORS: true, allowTaint: true, scrollY: -window.scrollY });
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        // simple pagination if needed
+        setTimeout(() => {}, 0);
+        const fileName = `budget_report.pdf`;
+        pdf.save(fileName);
+      } else {
+        const elementHtml = budgetRef.current.innerHTML;
+        const newWin = window.open('', '_blank', 'width=800,height=600');
+        newWin.document.write(`
+          <html>
+            <head>
+              <title>Budget Report</title>
+              <meta name="viewport" content="width=device-width,initial-scale=1" />
+              <style>body{margin:0;padding:20px;background:white;color:#111;font-family:system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;} img{max-width:100%;height:auto}</style>
+            </head>
+            <body>${elementHtml}</body>
+          </html>`);
+        newWin.document.close();
+        newWin.focus();
+        setTimeout(() => { newWin.print(); }, 600);
+      }
+    } catch (err) {
+      console.error(err);
+      const msg = (err && err.message) || String(err || 'Unknown error');
+      if (/tainted|cross-origin|CORS/i.test(msg)) {
+        alert('Export failed due to cross-origin (CORS) issues on images. Use images with CORS enabled or host them on the same origin.');
+      } else {
+        alert('Export failed. Install `jspdf` and `html2canvas` for best results (`npm install jspdf html2canvas`) or check the console for details.');
+      }
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   const filteredExpenses = filterCategory === 'all' 
@@ -151,7 +200,7 @@ const BudgetManagement = () => {
       <SidebarNavigation isCollapsed={isSidebarCollapsed} />
       <div className={`transition-smooth ${isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-60'}`}>
         <div className="p-4 md:p-6 lg:p-8">
-          <div className="max-w-7xl mx-auto">
+            <div ref={budgetRef} id="budget-export-area" className="max-w-7xl mx-auto">
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6 md:mb-8">
               <div>
                 <h1 className="text-foreground text-2xl md:text-3xl lg:text-4xl font-semibold mb-2">Budget Management</h1>
@@ -163,9 +212,11 @@ const BudgetManagement = () => {
                   iconName="Download"
                   iconPosition="left"
                   onClick={handleExportReport}
+                  loading={isExporting}
+                  disabled={isExporting}
                   className="flex-1 sm:flex-none"
                 >
-                  Export Report
+                  {isExporting ? 'Exporting…' : 'Export Report'}
                 </Button>
                 <Button
                   variant="outline"

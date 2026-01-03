@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SidebarNavigation from '../../components/ui/SidebarNavigation';
 import Button from '../../components/ui/Button';
@@ -12,6 +12,8 @@ const TripDetail = () => {
   const navigate = useNavigate();
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [activeView, setActiveView] = useState('day');
+  const contentRef = useRef(null);
+  const [isExporting, setIsExporting] = useState(false);
 
   const tripData = {
     id: 1,
@@ -172,6 +174,81 @@ const TripDetail = () => {
     navigate('/budget-management');
   };
 
+  const handleExportPdf = async () => {
+    if (!contentRef?.current) return;
+    setIsExporting(true);
+    try {
+      // Try to dynamically import libraries; if not available we'll fallback to print
+      const jspdfModule = await import('jspdf').catch(() => null);
+      const html2canvasModule = await import('html2canvas').catch(() => null);
+
+      if (jspdfModule && (jspdfModule.jsPDF || jspdfModule.default) && html2canvasModule) {
+        const jsPDF = jspdfModule.jsPDF || jspdfModule.default;
+        const html2canvas = html2canvasModule.default || html2canvasModule;
+
+        const element = contentRef.current;
+        const canvas = await html2canvas(element, { scale: 2, useCORS: true, allowTaint: true, scrollY: -window.scrollY });
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+        // Add first page
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+
+        // Handle multi-page by slicing canvas vertically
+        let remainingHeight = imgProps.height - (imgProps.height * (pdf.internal.pageSize.getHeight() / pdfHeight));
+        let sliceHeightPx = Math.floor((canvas.height * pdf.internal.pageSize.getHeight()) / pdfHeight);
+        let page = 1;
+        while (remainingHeight > 0) {
+          const tmpCanvas = document.createElement('canvas');
+          tmpCanvas.width = canvas.width;
+          tmpCanvas.height = Math.min(sliceHeightPx, canvas.height - (page * sliceHeightPx));
+          const ctx = tmpCanvas.getContext('2d');
+          ctx.drawImage(canvas, 0, page * sliceHeightPx, canvas.width, tmpCanvas.height, 0, 0, canvas.width, tmpCanvas.height);
+          const tmpImg = tmpCanvas.toDataURL('image/png');
+          pdf.addPage();
+          const tmpImgProps = pdf.getImageProperties(tmpImg);
+          const tmpPdfHeight = (tmpImgProps.height * pdfWidth) / tmpImgProps.width;
+          pdf.addImage(tmpImg, 'PNG', 0, 0, pdfWidth, tmpPdfHeight);
+          remainingHeight -= sliceHeightPx;
+          page += 1;
+        }
+
+        const fileName = `${(tripData?.title || 'itinerary').replace(/\s+/g,'_')}.pdf`;
+        pdf.save(fileName);
+
+      } else {
+        // Fallback: open printable window (works without extra deps)
+        const elementHtml = contentRef.current.innerHTML;
+        const newWin = window.open('', '_blank', 'width=800,height=600');
+        newWin.document.write(`
+          <html>
+            <head>
+              <title>${tripData?.title || 'itinerary'}</title>
+              <meta name="viewport" content="width=device-width,initial-scale=1" />
+              <style>body{margin:0;padding:20px;background:white;color:#111;font-family:system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;} img{max-width:100%;height:auto}</style>
+            </head>
+            <body>${elementHtml}</body>
+          </html>`);
+        newWin.document.close();
+        newWin.focus();
+        setTimeout(() => { newWin.print(); }, 600);
+      }
+    } catch (err) {
+      console.error(err);
+      const msg = (err && err.message) || String(err || 'Unknown error');
+      if (/tainted|cross-origin|CORS/i.test(msg)) {
+        alert('Export failed due to cross-origin (CORS) issues on images. Use images with CORS enabled or host them on the same origin.');
+      } else {
+        alert('Export failed. Install `jspdf` and `html2canvas` for best results (`npm install jspdf html2canvas`) or check the console for details.');
+      }
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <SidebarNavigation isCollapsed={isSidebarCollapsed} />
@@ -180,7 +257,7 @@ const TripDetail = () => {
         isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-60'} pt-16 lg:pt-0`
         }>
 
-        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-8">
+<div ref={contentRef} id="export-area" className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-8">
           <TripHeader
             trip={tripData}
             onShare={handleShare}
@@ -250,9 +327,11 @@ const TripDetail = () => {
                   fullWidth
                   iconName="Download"
                   iconPosition="left"
-                  onClick={() => alert('Export itinerary as PDF')}>
+                  onClick={handleExportPdf}
+                  loading={isExporting}
+                  disabled={isExporting}>
 
-                  Export Itinerary
+                  {isExporting ? 'Exporting…' : 'Export Itinerary'}
                 </Button>
               </div>
             </div>
