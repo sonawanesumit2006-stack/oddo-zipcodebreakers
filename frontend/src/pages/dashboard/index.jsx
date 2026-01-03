@@ -10,7 +10,7 @@ import BudgetOverviewCard from './components/BudgetOverviewCard';
 import TrendingDestinationCard from './components/TrendingDestinationCard';
 import TripMapVisualization from './components/TripMapVisualization';
 import QuickToolsCard from './components/QuickToolsCard';
-import InviteFriendsCard from './components/InviteFriendsCard';
+import CommunityCard from './components/CommunityCard';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -66,21 +66,27 @@ const Dashboard = () => {
       name: "Jaipur, Rajasthan",
       description: "Pink city palaces, traditional handicrafts...",
       image: "https://images.unsplash.com/photo-1641231825326-6c2593710812",
-      imageAlt: "Amber Fort palace in Jaipur with golden sunset light illuminating sandstone walls and Mughal architecture"
+      imageAlt: "Amber Fort palace in Jaipur with golden sunset light illuminating sandstone walls and Mughal architecture",
+    highlights: ["Amber Fort", "City Palace", "Hawa Mahal", "Local bazaars"],
+    whyVisit: "Rich Rajasthani architecture, vibrant bazaars, historic forts and palaces, and excellent handicraft shopping."
     },
     {
       id: 2,
       name: "Goa Beaches",
       description: "Golden beaches, Portuguese heritage...",
       image: "https://img.rocket.new/generatedImages/rocket_gen_img_1ea0d9e38-1764660929642.png",
-      imageAlt: "Pristine Goa beach with golden sand, palm trees, and turquoise Arabian Sea waters at sunset"
+      imageAlt: "Pristine Goa beach with golden sand, palm trees, and turquoise Arabian Sea waters at sunset",
+    highlights: ["Baga Beach", "Colva Beach", "Watersports", "Beach shacks & nightlife"],
+    whyVisit: "Perfect for sun, sand, seafood, lively nightlife, and a relaxed coastal vibe."
     },
     {
       id: 3,
       name: "Manali, Himachal",
       description: "Snow-capped peaks, adventure sports...",
       image: "https://images.unsplash.com/photo-1579171634079-9bae0cc73d75",
-      imageAlt: "Snow-covered Himalayan mountains in Manali with pine forests and traditional wooden houses"
+      imageAlt: "Snow-covered Himalayan mountains in Manali with pine forests and traditional wooden houses",
+    highlights: ["Rohtang Pass", "Solang Valley", "Hadimba Temple", "Trekking & skiing"],
+    whyVisit: "Scenic Himalayan valleys offering adventure sports, cool climate, and beautiful mountain views."
     }];
 
 
@@ -182,7 +188,7 @@ const Dashboard = () => {
                 {/* Recent Adventures */}
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-2xl font-bold text-gray-900">Recent Adventures</h2>
+                    <h2 className="text-2xl font-bold text-foreground">Recent Adventures</h2>
                     <Button
                       variant="outline"
                       size="sm"
@@ -201,7 +207,7 @@ const Dashboard = () => {
 
                 {/* Trending Destinations */}
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">Trending Destinations for You</h2>
+                  <h2 className="text-2xl font-bold text-foreground mb-4">Trending Destinations for You</h2>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {trendingDestinations?.map((destination) =>
                       <TrendingDestinationCard key={destination?.id} destination={destination} />
@@ -212,14 +218,16 @@ const Dashboard = () => {
 
               {/* Right Sidebar */}
               <div className="space-y-6">
-                {/* Budget Overview */}
-                <BudgetOverviewCard budgetData={budgetData} />
+                <div className="sticky top-24 space-y-6">
+                  {/* Budget Overview */}
+                  <BudgetOverviewCard budgetData={budgetData} />
 
                 {/* Quick Tools */}
-                <QuickToolsCard onShowMap={() => setShowMap(true)} />
+                <QuickToolsCard />
 
-                {/* Invite Friends */}
-                <InviteFriendsCard />
+                  {/* Community */}
+                  <CommunityCard />
+                </div>
               </div>
             </div>
           </div>

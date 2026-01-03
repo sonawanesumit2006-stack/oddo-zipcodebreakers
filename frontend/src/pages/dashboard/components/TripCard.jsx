@@ -51,8 +51,8 @@ const TripCard = ({ trip }) => {
         </button>
       </div>
       <div className="p-4">
-        <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-1">{trip?.title}</h3>
-        <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
+        <h3 className="text-lg font-bold text-foreground mb-2 line-clamp-1">{trip?.title}</h3>
+        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
           <Icon name="Calendar" size={14} color="#6B7280" />
           <span>
             {formatDate(trip?.startDate)} - {formatDate(trip?.endDate)}
