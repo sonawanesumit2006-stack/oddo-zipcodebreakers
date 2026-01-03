@@ -56,7 +56,7 @@ const LandingPage = () => {
                 <div className="relative z-20 max-w-4xl mx-auto mt-16">
                     <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-3 py-1 rounded-full text-white text-xs font-semibold mb-6 border border-white/20">
                         <span className="w-2 h-2 bg-blue-400 rounded-full"></span>
-                        #1 Travel Planning Platform
+                        Travel Planning Platform
                     </div>
                     <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
                         Discover the World,<br />
@@ -90,25 +90,7 @@ const LandingPage = () => {
                         </button>
                     </div>
 
-                    <div className="mt-8 flex flex-col items-center gap-2 text-white/80 text-sm">
-                        <div className="flex -space-x-2">
-                            {[1, 2, 3, 4].map(i => (
-                                <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-gray-300 overflow-hidden">
-                                    <img src={`https://i.pravatar.cc/100?img=${i + 10}`} alt="User" />
-                                </div>
-                            ))}
-                            <div className="w-8 h-8 rounded-full border-2 border-white bg-blue-600 flex items-center justify-center text-[10px] font-bold text-white">
-                                +2k
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                            <div className="flex text-yellow-400 text-xs">
-                                {'★★★★★'.split('').map((s, i) => <span key={i}>{s}</span>)}
-                            </div>
-                            <span>Loved by 10,000+ travelers worldwide</span>
-                        </div>
-                        <Icon name="ChevronDown" className="w-6 h-6 animate-bounce mt-4 opacity-50" />
-                    </div>
+
                 </div>
             </section>
 
@@ -278,7 +260,7 @@ const LandingPage = () => {
                                 Ready to start your <br />next adventure?
                             </h2>
                             <p className="text-gray-400 text-lg mb-8 max-w-md">
-                                Join over 50,000 travelers who are planning smarter, exploring further, and spending less.
+                                Join travelers who are planning smarter, exploring further, and spending less.
                             </p>
                             <button
                                 onClick={() => navigate('/signup')}
@@ -288,24 +270,7 @@ const LandingPage = () => {
                             </button>
                         </div>
 
-                        <div className="lg:w-1/2 grid grid-cols-2 gap-4 w-full">
-                            <div className="bg-white/5 backdrop-blur-sm p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
-                                <div className="text-3xl font-bold text-blue-400 mb-1">50k+</div>
-                                <div className="text-sm text-gray-400 uppercase tracking-widest font-medium">Active Users</div>
-                            </div>
-                            <div className="bg-white/5 backdrop-blur-sm p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
-                                <div className="text-3xl font-bold text-purple-400 mb-1">120+</div>
-                                <div className="text-sm text-gray-400 uppercase tracking-widest font-medium">Countries</div>
-                            </div>
-                            <div className="bg-white/5 backdrop-blur-sm p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
-                                <div className="text-3xl font-bold text-cyan-400 mb-1">1M+</div>
-                                <div className="text-sm text-gray-400 uppercase tracking-widest font-medium">Itineraries</div>
-                            </div>
-                            <div className="bg-white/5 backdrop-blur-sm p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
-                                <div className="text-3xl font-bold text-yellow-400 mb-1">4.9</div>
-                                <div className="text-sm text-gray-400 uppercase tracking-widest font-medium">App Store Rating</div>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </section>

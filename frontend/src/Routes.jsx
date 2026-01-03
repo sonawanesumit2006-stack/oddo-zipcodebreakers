@@ -20,12 +20,14 @@ import Community from './pages/community';
 import EventsList from './pages/community/components/EventsList';
 import PostDetails from './pages/community/PostDetails';
 import Settings from './pages/settings';
+import FloatingQuickTools from './components/FloatingQuickTools';
 
 const Routes = () => {
   return (
     <BrowserRouter>
       <ErrorBoundary>
         <ScrollToTop />
+        <FloatingQuickTools />
         <RouterRoutes>
           {/* Define your route here */}
           <Route path="/" element={<LandingPage />} />
